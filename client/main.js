@@ -3,6 +3,10 @@ import { ReactiveVar } from 'meteor/reactive-var';
 
 import './main.html';
 
+import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.css';
+// import 'bootstrap/dist/css/bootstrap-theme.css';
+
 Template.hello.onCreated(function helloOnCreated() {
   // counter starts at 0
   this.counter = new ReactiveVar(0);
