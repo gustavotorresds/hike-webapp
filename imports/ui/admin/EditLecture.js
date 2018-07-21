@@ -19,6 +19,19 @@ class ContentItem extends Component {
  
 // Task component - represents a single todo item
 class EditLecture extends Component {
+    constructor(props) {
+        super(props);
+        console.log('PROPS: ', props);
+        this.state = {
+            lectureTitle: props.lecture ? props.lecture.title : ''
+        }
+    }
+
+    updateTitle(event) {
+        this.setState({lectureTitle: event.target.value});
+    }
+
+
     handleNewContent(event) {
         event.preventDefault();
 
@@ -38,10 +51,25 @@ class EditLecture extends Component {
         this.refs.content.value = '';
     }
 
+    handleLectureTitleChange(event) {
+        event.preventDefault();
+
+        const newTitle = this.refs.lectureTitle.value;
+
+        Lectures.update(this.props.lectureId, {
+            $set: {
+                title: newTitle
+            }
+        })
+    }
+
     renderContent() {
-        const contentList = this.props.lecture ? this.props.lecture.contents.map((contentId) => {
-            return <ContentItem key={contentId} contentId={contentId}/>
-        }) : null;
+        const contentList = this.props.lecture ?
+            this.props.lecture.contents.map((contentId) => {
+                const content = Contents.findOne({_id: this.props.contentId});
+
+                return <ContentItem key={contentId} contentId={contentId}/>;
+            }) : null;
 
         return <ul>{contentList}</ul>;
     }
@@ -49,14 +77,22 @@ class EditLecture extends Component {
     render() {
         return (
             <div>
-              <h1>{this.props.lecture ? this.props.lecture.title : ''}</h1>
+                <form onSubmit={this.handleLectureTitleChange.bind(this)}>
+                    <input
+                        type="text"
+                        value={this.state.lectureTitle}
+                        ref="lectureTitle"
+                        onChange={this.updateTitle.bind(this)}
+                    />
+                    <input type="submit"/>
+                </form>
               
-              <form action="#" onSubmit={this.handleNewContent.bind(this)}>
-                  <textarea ref="content"></textarea>
-                  <input type="submit"/>
-              </form>
+                <form action="#" onSubmit={this.handleNewContent.bind(this)}>
+                    <textarea ref="content"></textarea>
+                    <input type="submit"/>
+                </form>
 
-              {this.renderContent()}
+                {this.renderContent()}
             </div>
         );
     }
