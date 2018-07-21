@@ -21,7 +21,6 @@ class ContentItem extends Component {
 class EditLecture extends Component {
     constructor(props) {
         super(props);
-        console.log('PROPS: ', props);
         this.state = {
             lectureTitle: props.lecture ? props.lecture.title : ''
         }
