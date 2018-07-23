@@ -3,17 +3,45 @@ import { withTracker } from 'meteor/react-meteor-data';
 
 import NewContent from './NewContent.js';
 
+import { convertToRaw } from 'draft-js';
+import { Editor, createEditorState } from 'medium-draft';
+import mediumDraftImporter from 'medium-draft/lib/importer';
+
 import { Courses } from '../../api/courses.js'
 import { Lectures } from '../../api/lectures.js'
 import { Contents } from '../../api/contents.js'
 
 class ContentItem extends Component {
+    constructor(props) {
+        super(props);
+
+        const con = Contents.findOne({_id: this.props.contentId});
+        if(con) {
+            if(con.type === 'text') {
+                const html = con.core;
+                this.state = {
+                    editorState: createEditorState(convertToRaw(mediumDraftImporter(html))),
+                    type: 'text'
+                };
+                this.onChange = (editorState) => {
+                    this.setState({ editorState });
+                };
+            }
+        }
+    }
+
     render() {
-        const content = Contents.findOne({_id: this.props.contentId});
+        let content = null;
+        if(this.state && this.state.type === 'text') {
+            content = <Editor
+                    editorState={this.state ? this.state.editorState : ''}
+                    onChange={this.onChange}
+                    editorEnabled={false}/>;
+        }
 
         return (
             <li>
-                {content.core}
+                {content}
             </li>
         );
     }
@@ -69,7 +97,7 @@ class EditLecture extends Component {
                         />
                     </div>
                     
-                    <button type="submit" class="btn btn-secondary">Enviar</button>
+                    <button type="submit" className="btn btn-secondary">Enviar</button>
                 </form>
 
                 <NewContent lectureId={this.props.lectureId}/>
