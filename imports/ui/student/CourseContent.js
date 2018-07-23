@@ -21,18 +21,30 @@ class ContentListItem extends Component {
             };
 
             this.onChange = (editorState) => {
-            this.setState({ editorState });
-        };
+                this.setState({ editorState });
+            };
+        } else if(con.type === 'video') {
+            console.log('Displaying a video');
+            this.state = {
+                url: con.core,
+                type: 'video',
+            }
         }
     }
 
     render() {
         let content = null;
-        if(this.state && this.state.type === 'text') {
-            content = <Editor
+        if(this.state) {
+            if(this.state.type === 'text') {
+                content = <Editor
                     editorState={this.state ? this.state.editorState : ''}
                     onChange={this.onChange}
                     editorEnabled={false}/>;
+            } else if(this.state.type === 'video') {
+                content = <div className="embed-responsive embed-responsive-16by9">
+                  <iframe className="embed-responsive-item" src={this.state.url} allowFullScreen></iframe>
+                </div>
+            }
         }
 
         return (
