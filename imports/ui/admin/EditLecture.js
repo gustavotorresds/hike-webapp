@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 
+import NewContent from './NewContent.js';
+
 import { Courses } from '../../api/courses.js'
 import { Lectures } from '../../api/lectures.js'
 import { Contents } from '../../api/contents.js'
@@ -30,26 +32,6 @@ class EditLecture extends Component {
         this.setState({lectureTitle: event.target.value});
     }
 
-
-    handleNewContent(event) {
-        event.preventDefault();
-
-        const contentCore = this.refs.content.value;
-
-        const newContentId = Contents.insert({
-            type: 'text',
-            core: contentCore
-        });
-
-        Lectures.update(this.props.lectureId, {
-            $push: {
-                'contents': newContentId
-            }
-        });
-
-        this.refs.content.value = '';
-    }
-
     handleLectureTitleChange(event) {
         event.preventDefault();
 
@@ -77,19 +59,20 @@ class EditLecture extends Component {
         return (
             <div>
                 <form onSubmit={this.handleLectureTitleChange.bind(this)}>
-                    <input
-                        type="text"
-                        value={this.state.lectureTitle}
-                        ref="lectureTitle"
-                        onChange={this.updateTitle.bind(this)}
-                    />
-                    <input type="submit"/>
+                    <div className="form-group">
+                        <input
+                            className="form-control"
+                            type="text"
+                            value={this.state.lectureTitle}
+                            ref="lectureTitle"
+                            onChange={this.updateTitle.bind(this)}
+                        />
+                    </div>
+                    
+                    <button type="submit" class="btn btn-secondary">Enviar</button>
                 </form>
-              
-                <form action="#" onSubmit={this.handleNewContent.bind(this)}>
-                    <textarea ref="content"></textarea>
-                    <input type="submit"/>
-                </form>
+
+                <NewContent lectureId={this.props.lectureId}/>
 
                 {this.renderContent()}
             </div>

@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 
+import { StyleSheet, css } from 'aphrodite';
+import globalStyles from '../globalStyles.js';
+
 import { Courses } from '../../api/courses.js';
 import { Lectures } from '../../api/lectures.js';
 
@@ -10,8 +13,8 @@ class LectureListItem extends Component {
         const lectureInfo = Lectures.findOne({_id: this.props.lectureId});
 
         return (
-            <li>
-                <a href={'/admin/courses/' + this.props.courseId + '/lectures/' + this.props.lectureId}>{lectureInfo.title}</a>
+            <li className={css(globalStyles.listItem)}>
+                <a className={css(globalStyles.listLink)} href={'/admin/courses/' + this.props.courseId + '/lectures/' + this.props.lectureId}>{lectureInfo.title}</a>
             </li>
         );
     }
@@ -49,8 +52,12 @@ class AdminLectures extends Component {
     render() {
         return (
             <div>
-                <h1>{this.props.course ? this.props.course.title : ''}</h1>
-                <button onClick={this.createLecture.bind(this)}>New Lecture</button>
+                <h2>{this.props.course ? this.props.course.title : ''}</h2>
+                <button
+                    onClick={this.createLecture.bind(this)}
+                    className="btn btn-secondary">
+                    New Lecture
+                </button>
                 {this.renderLectures()}
             </div>
         );

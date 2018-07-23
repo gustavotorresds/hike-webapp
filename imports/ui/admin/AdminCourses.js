@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
-import { Courses } from '../../api/courses.js'
+
+import { Courses } from '../../api/courses.js';
 
 class Course extends Component {
     render() {
