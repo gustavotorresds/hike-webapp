@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { withTracker } from 'meteor/react-meteor-data';
+
+import { StyleSheet, css } from 'aphrodite';
  
 class App extends Component {
     render() {
         return (
-            <div>
+            <div className={css(styles.appContainer)}>
                 {this.props.main}
             </div>
         );
@@ -19,3 +21,9 @@ export default withTracker(props => {
     
   };
 })(App);
+
+const styles = StyleSheet.create({
+    appContainer: {
+        listStyle: 'none',
+    }
+});

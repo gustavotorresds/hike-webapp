@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
+import { StyleSheet, css } from 'aphrodite';
 
 import { Contents } from '../../api/contents.js';
 
@@ -8,14 +9,14 @@ class ContentListItem extends Component {
         const con = Contents.findOne({_id: this.props.contentId});
 
         return (
-            <div>
+            <div className={css(style.contentItem)}>
                 {con.core}
             </div>
         );
     }
 }
 
-class CourseMain extends Component {
+class CourseContent extends Component {
     renderContents() {
         if(this.props.lecture) {
             const contentsList = this.props.lecture.contents.map((contentId) => {
@@ -29,13 +30,8 @@ class CourseMain extends Component {
     render() {
         return (
             <div>
-                <a href="#">Prev</a>
-                <a href="#">Next</a>
-
-                <div>
-                    Content
-                    {this.renderContents()}
-                </div>
+                <h2>{this.props.lecture ? this.props.lecture.title : ''}</h2>
+                {this.renderContents()}
             </div>
         );
     }
@@ -45,4 +41,10 @@ export default withTracker((props) => {
   return {
     
   };
-})(CourseMain);
+})(CourseContent);
+
+const style = StyleSheet.create({
+    contentItem: {
+        margin: '20px 0'
+    }
+});

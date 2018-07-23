@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
+import { StyleSheet , css } from 'aphrodite';
+
+import globalStyles from '../globalStyles.js';
 
 import { Courses } from '../../api/courses.js';
 import { Lectures } from '../../api/lectures.js';
@@ -10,7 +13,14 @@ class Lecture extends Component {
 
         return (
             <div>
-                <li><a href={'/courses/' + this.props.courseId + '/lectures/' + lec._id}>{lec.title}</a></li>
+                <li className={css(globalStyles.listItem)}>
+                    <a
+                    href={'/courses/' + this.props.courseId + '/lectures/' + lec._id}
+                    className={css(globalStyles.listLink)}
+                    >
+                    {lec.title}
+                    </a>
+                </li>
             </div>
         );
     }
@@ -23,13 +33,14 @@ class CourseCurriculum extends Component {
             const curriculum = course.lectures.map((lectureId) => {
                 return <Lecture key={lectureId} courseId={this.props.courseId} lectureId={lectureId}/>
             });
-            return curriculum;
+            return <ul className={css(globalStyles.list)}>{curriculum}</ul>;
         }
     }
 
     render() {
         return (
             <div>
+                <a href="/courses">Voltar</a>
                 <h1>{this.props.course ? this.props.course.title : ''} Curriculum</h1>
                 {this.renderCurriculum()}
             </div>
