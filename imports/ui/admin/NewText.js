@@ -28,7 +28,8 @@ class NewText extends Component {
 
         const newContentId = Contents.insert({
             type: 'text',
-            core: renderedHTML
+            core: renderedHTML,
+            lectureId: this.props.lectureId,
         });
 
         Lectures.update(this.props.lectureId, {

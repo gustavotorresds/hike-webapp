@@ -28,6 +28,8 @@ export default withTracker((props) => {
 
 const style = StyleSheet.create({
 	nav: {
-		padding: '0'
+		padding: '0',
+		backgroundColor: '#F6F6F6',
+        borderRight: '1px solid #E7E7E7',
 	}
 });

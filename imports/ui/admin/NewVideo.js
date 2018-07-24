@@ -11,6 +11,7 @@ class NewVideo extends Component {
         const newContentId = Contents.insert({
             type: 'video',
             core: this.refs.videoUrl.value,
+            lectureId: this.props.lectureId,
         });
 
         Lectures.update(this.props.lectureId, {

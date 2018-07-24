@@ -11,6 +11,7 @@ class NewImage extends Component {
         const newContentId = Contents.insert({
             type: 'image',
             core: this.refs.imageUrl.value,
+            lectureId: this.props.lectureId,
         });
 
         Lectures.update(this.props.lectureId, {

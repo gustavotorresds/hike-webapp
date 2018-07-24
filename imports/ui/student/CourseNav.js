@@ -40,7 +40,7 @@ class CourseNav extends Component {
     render() {
         return (
             <div className={css(style.nav)}>
-                <h2>{this.props.course ? this.props.course.title : ''}</h2>
+                <h2 className={css(style.navTitle)}>{this.props.course ? this.props.course.title : ''}</h2>
                 {this.renderLectures()}
             </div>
         );
@@ -54,21 +54,31 @@ export default withTracker((props) => {
 })(CourseNav);
 
 const style = StyleSheet.create({
-    nav: {
-        backgroundColor: '#F6F6F6',
-        borderRight: '1px solid #E7E7E7',
+    navTitle: {
+        padding: '10px',
     },
     lectureList: {
         listStyle: 'none',
         padding: '0'
     },
     lectureLink: {
-        color: 'black',
+        display: 'block',
+        color: '#5B5B5B',
+        padding: '10px 0 10px 10px',
+        margin: '0',
+        borderBottom: '1px solid #E7E7E7',
         ':hover': {
             textDecoration: 'none',
-        }
+            color: '#8C8C8C',
+            backgroundColor: 'rgba(67, 170, 255, 0.2)',
+            cursor: 'pointer',
+        },
     },
     highlight:{
-        fontWeight: 'bold'
-    }
+        fontWeight: 'bold',
+        backgroundColor: 'rgba(112, 190, 255, 0.5)',
+        ':hover': {
+            color: 'black',
+        },
+    },
 });

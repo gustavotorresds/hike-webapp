@@ -25,7 +25,8 @@ class AdminLectures extends Component {
     createLecture() {
         let newLectureId = Lectures.insert({
             title: "New Lecture",
-            contents: []
+            contents: [],
+            courseId: this.props.courseId,
         });
 
         Courses.update(this.props.courseId,

@@ -7,19 +7,18 @@ class Course extends Component {
     render() {
         return (
             <li>
-                <a href={'/admin/courses/' + this.props.info._id}>
-                    {this.props.info.title}
+                <a href={'/admin/courses/' + this.props.course._id}>
+                    {this.props.course.title}
                 </a>
             </li>
         );
     }
 }
- 
-// Task component - represents a single todo item
+
 class AdminCourses extends Component {
     renderCourses() {
         const coursesMapped = this.props.courses.map((course) => {
-            return <Course key={course._id} info={course}/>;
+            return <Course key={course._id} course={course}/>;
         });
 
         return <ul>{coursesMapped}</ul>;
@@ -28,7 +27,7 @@ class AdminCourses extends Component {
     render() {
         return (
             <div>
-                <h1>Aqui estão Admin Courses</h1>
+                <h3>Courses</h3>
                 {this.renderCourses()}
             </div>
         );
