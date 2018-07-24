@@ -26,7 +26,6 @@ class NewImage extends Component {
 	render() {
 		return(
 			<div>
-				<h3>New Image</h3>
 				<form action="#" onSubmit={this.handleNewContent.bind(this)}>
 					<div className="form-group">
 						<input placeholder="URL da imagem" ref="imageUrl" type="text" className="form-control"/>

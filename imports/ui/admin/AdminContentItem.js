@@ -6,6 +6,7 @@ import { StyleSheet, css } from 'aphrodite';
 import { convertToRaw } from 'draft-js';
 import { Editor, createEditorState } from 'medium-draft';
 import mediumDraftImporter from 'medium-draft/lib/importer';
+import mediumDraftExporter from 'medium-draft/lib/exporter';
 
 import { Lectures } from '../../api/lectures.js';
 import { Contents } from '../../api/contents.js';
@@ -20,7 +21,8 @@ class AdminContentItem extends Component {
                 const html = con.core;
                 this.state = {
                     editorState: createEditorState(convertToRaw(mediumDraftImporter(html))),
-                    type: 'text'
+                    type: 'text',
+                    editMode: false,
                 };
                 this.onChange = (editorState) => {
                     this.setState({ editorState });
@@ -30,7 +32,20 @@ class AdminContentItem extends Component {
     }
 
     editContent() {
-    	console.log('Editing');
+    	this.setState({editMode: true});
+    }
+
+    saveContent() {
+    	const editorState = this.state.editorState;
+		const renderedHTML = mediumDraftExporter(editorState.getCurrentContent());
+
+    	Contents.update(this.props.contentId, {
+    		$set: {
+		        core: renderedHTML
+    		}
+    	})
+
+    	this.setState({editMode: false});
     }
 
     removeContent() {
@@ -55,8 +70,8 @@ class AdminContentItem extends Component {
         		content = <Editor
                     editorState={this.state ? this.state.editorState : ''}
                     onChange={this.onChange}
-                    editorEnabled={false}/>;
-                   type = 'Text';	
+                    editorEnabled={this.state.editMode}/>;
+                type = 'Text';	
         	}
         }
 
@@ -70,7 +85,10 @@ class AdminContentItem extends Component {
             			{content}
             		</div>
             		<div className="col-md-2">
-            			<button onClick={this.editContent.bind(this)} className="btn btn-warning mb-3">Editar</button>
+            			{this.state.editMode ?
+            				<button onClick={this.saveContent.bind(this)} className="btn btn-success mb-3">Salvar</button> :
+            				<button onClick={this.editContent.bind(this)} className="btn btn-warning mb-3">Editar</button>
+            			}
             			<button onClick={this.removeContent.bind(this)} className="btn btn-danger">Remover</button>
             		</div>
             	</div>

@@ -11,28 +11,55 @@ import { Contents } from '../../api/contents.js';
 import { Lectures } from '../../api/lectures.js';
 
 class NewContent extends Component {
-
 	render() {
 		return(
-			<Tabs>
-		    <TabList>
-		      <Tab>Rich Text</Tab>
-		      <Tab>Video URL</Tab>
-		      <Tab>Image URL</Tab>
-		    </TabList>
+			<Tabs
+				className="mt-5"
+				selectedTabClassName={css(style.selectedTab)}
+				selectedTabPanelClassName={css(style.selectedPanel)}>
+			    <TabList className={css(style.tabList)}>
+			      <Tab className={css(style.tabTitle)}>Rich Text</Tab>
+			      <Tab className={css(style.tabTitle)}>Video URL</Tab>
+			      <Tab className={css(style.tabTitle)}>Image URL</Tab>
+			    </TabList>
 
-		    <TabPanel>
-		    	<NewText lectureId={this.props.lectureId}/>
-		    </TabPanel>
-		    <TabPanel>
-		     	<NewVideo lectureId={this.props.lectureId}/>
-		    </TabPanel>
-		    <TabPanel>
-		     	<NewImage lectureId={this.props.lectureId}/>
-		    </TabPanel>
+			    <TabPanel className={css(style.tabPanel)}>
+			    	<NewText lectureId={this.props.lectureId}/>
+			    </TabPanel>
+			    <TabPanel className={css(style.tabPanel)}>
+			     	<NewVideo lectureId={this.props.lectureId}/>
+			    </TabPanel>
+			    <TabPanel className={css(style.tabPanel)}>
+			     	<NewImage lectureId={this.props.lectureId}/>
+			    </TabPanel>
 		  </Tabs>
 		);
 	}
 }
 
 export default NewContent;
+
+const style = StyleSheet.create({
+	tabTitle: {
+		display: 'inline',
+		padding: '15px',
+		margin: '0',
+		':hover': {
+			cursor: 'pointer',
+		},
+	},
+	selectedTab: {
+		backgroundColor: 'white',
+		border: '1px solid #ced4da',
+		borderBottom: 'none',
+		borderRadius: '5px 5px 0 0',
+	},
+	tabList: {
+		margin: '0'
+	},
+	selectedPanel: {
+		border: '1px solid #ced4da',
+		padding: '20px',
+        backgroundColor: 'white',
+	}
+});

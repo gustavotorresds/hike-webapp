@@ -26,7 +26,6 @@ class NewVideo extends Component {
 	render() {
 		return(
 			<div>
-				<h3>New Video</h3>
 				<form action="#" onSubmit={this.handleNewContent.bind(this)}>
 					<div className="form-group">
 						<input placeholder="URL do vídeo" ref="videoUrl" type="text" className="form-control"/>

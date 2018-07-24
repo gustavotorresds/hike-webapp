@@ -45,15 +45,16 @@ class NewText extends Component {
     	const editorState = this.state.editorState;
 
     	return(
-    		<div>
-	    		<h3>Rich Text</h3>
+    		<div className={css(style.container)}>
 		    	<form action="#" onSubmit={this.handleNewContent.bind(this)}>
-					<Editor
-				        ref="editor"
-				        placeholder="Seu conteúdo incrível..."
-				        editorState={editorState}
-				        onChange={this.onChange}
-				        editorEnabled={true}/>
+                    <div className={'mb-4 ' + css(style.editorContainer)}>
+                        <Editor
+                            ref="editor"
+                            placeholder="Seu conteúdo incrível..."
+                            editorState={editorState}
+                            onChange={this.onChange}
+                            editorEnabled={true}/>
+                    </div>
 	                <button type="submit" className="btn btn-primary">Enviar</button>
 	            </form>
             </div>
@@ -62,3 +63,9 @@ class NewText extends Component {
 }
 
 export default NewText;
+
+const style = StyleSheet.create({
+    editorContainer: {
+        border: '1px solid #ced4da',
+    }
+});
