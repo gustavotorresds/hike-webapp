@@ -5,18 +5,47 @@ import { StyleSheet, css } from 'aphrodite';
 
 import NewContent from './NewContent.js';
 import AdminContentItem from './AdminContentItem.js';
+// Drag and drop implemented with https://github.com/clauderic/react-sortable-hoc
+import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
 
 import { Courses } from '../../api/courses.js';
 import { Lectures } from '../../api/lectures.js';
 import { Contents } from '../../api/contents.js';
  
-// Task component - represents a single todo item
 class EditLecture extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
-            lectureTitle: props.lecture ? props.lecture.title : ''
+            lectureTitle: props.lecture ? props.lecture.title : '',
+            contents: props.lecture ? props.lecture.contents : [],
         };
+
+        this.onSortEnd = ({oldIndex, newIndex}) => {
+            this.setState({
+              contents: arrayMove(this.state.contents, oldIndex, newIndex),
+            });
+            Lectures.update(this.props.lectureId, {
+                $set: {
+                    contents: this.state.contents
+                }
+            });
+        };
+    }
+
+    /* 
+     * Using componentDidUpdate was necessary to load data on page refresh/update.
+     * Not sure why this was necessary and the solution is probably not that elegant.
+     * TODO: find a better way to have the data displayed.
+     * Source: https://forums.meteor.com/t/react-router-refresh-and-reactivity/42144/5
+     */
+    componentDidUpdate(prevProps, prevState) {
+        if(prevProps !== this.props) {
+            this.setState({
+                lectureTitle: this.props.lecture.title,
+                contents: this.props.lecture.contents,
+            });
+        }
     }
 
     updateTitle(event) {
@@ -36,14 +65,20 @@ class EditLecture extends Component {
     }
 
     renderContent() {
-        const contentList = this.props.lecture ?
-            this.props.lecture.contents.map((contentId) => {
-                const content = Contents.findOne({_id: this.props.contentId});
+        const SortableItem = SortableElement(({value}) =>
+          <AdminContentItem contentId={value}/>
+        );
 
-                return <AdminContentItem key={contentId} contentId={contentId}/>;
-            }) : null;
-
-        return <ul>{contentList}</ul>;
+        const SortableList = SortableContainer(({items}) => {
+          return (
+            <ul>
+              {items.map((value, index) => (
+                <SortableItem key={`item-${index}`} index={index} value={value} />
+              ))}
+            </ul>
+          );
+        });
+        return <SortableList distance={10} items={this.state.contents} onSortEnd={this.onSortEnd} />;
     }
 
     render() {

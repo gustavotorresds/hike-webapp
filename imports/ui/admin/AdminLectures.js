@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 
+import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
+
 import { StyleSheet, css } from 'aphrodite';
 import globalStyles from '../globalStyles.js';
 
@@ -13,15 +15,43 @@ class LectureListItem extends Component {
         const lectureInfo = Lectures.findOne({_id: this.props.lectureId});
 
         return (
-            <li className={css(globalStyles.listItem)}>
-                <a className={css(globalStyles.listLink)} href={'/admin/courses/' + this.props.courseId + '/lectures/' + this.props.lectureId}>{lectureInfo.title}</a>
-            </li>
+            <a className={css(globalStyles.listLink)} href={'/admin/courses/' + this.props.courseId + '/lectures/' + this.props.lectureId}>{lectureInfo.title}</a>
         );
     }
 }
  
-// Task component - represents a single todo item
 class AdminLectures extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            lectures: props.course ? props.course.lectures : [],
+        }
+        this.onSortEnd = ({oldIndex, newIndex}) => {
+            this.setState({
+                lectures: arrayMove(this.state.lectures, oldIndex, newIndex),
+            });
+            Courses.update(this.props.courseId, {
+                $set: {
+                    lectures: this.state.lectures
+                }
+            });
+        };
+    }
+
+    /* 
+     * Using componentDidUpdate was necessary to load data on page refresh/update.
+     * Not sure why this was necessary and the solution is probably not that elegant.
+     * TODO: find a better way to have the data displayed.
+     * Source: https://forums.meteor.com/t/react-router-refresh-and-reactivity/42144/5
+     */
+    componentDidUpdate(prevProps, prevState) {
+        if(prevProps !== this.props) {
+            this.setState({
+                lectures: this.props.course.lectures,
+            });
+        }
+    }
+
     createLecture() {
         let newLectureId = Lectures.insert({
             title: "New Lecture",
@@ -39,15 +69,31 @@ class AdminLectures extends Component {
     }
 
     renderLectures() {
-        let lectureList = this.props.course ?
-            this.props.course.lectures.map((lectureId) => {
-                return <LectureListItem
-                    key={lectureId}
-                    courseId={this.props.courseId}
-                    lectureId={lectureId}
-                />
-            }) : null;
-        return <ul>{lectureList}</ul>;
+        // let lectureList = this.props.course ?
+        //     this.props.course.lectures.map((lectureId) => {
+        //         return <LectureListItem
+        //             key={lectureId}
+        //             courseId={this.props.courseId}
+        //             lectureId={lectureId}
+        //         />
+        //     }) : null;
+        // return <ul>{lectureList}</ul>;
+
+        const SortableItem = SortableElement(({value}) =>
+          <li className={css(globalStyles.listItem)}><LectureListItem courseId={this.props.courseId} lectureId={value}/></li>
+        );
+
+        const SortableList = SortableContainer(({items}) => {
+          return (
+            <ul>
+              {items.map((value, index) => (
+                <SortableItem key={`item-${index}`} index={index} value={value} />
+              ))}
+            </ul>
+          );
+        });
+
+        return <SortableList distance={10} items={this.state.lectures} onSortEnd={this.onSortEnd} />
     }
 
     render() {
