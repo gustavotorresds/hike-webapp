@@ -18,6 +18,8 @@ if(Meteor.isClient) {
 	const defaultMode = modes[0];
 
 	import 'brace/mode/javascript';
+	import 'brace/mode/html';
+	import 'brace/mode/css';
 	import 'brace/theme/monokai';
 
 	import { Contents } from '../../api/contents.js';
@@ -38,9 +40,13 @@ if(Meteor.isClient) {
 		handleNewContent(event) {
 			event.preventDefault();
 			const codeContent = this.refs.Editor.editor.session.getValue();
+
 	        const newContentId = Contents.insert({
 	            type: 'code',
-	            core: codeContent,
+	            core: {
+	            	code: codeContent,
+	            	language: this.state.mode,
+	            },
 	            lectureId: this.props.lectureId,
 	        });
 
@@ -53,17 +59,33 @@ if(Meteor.isClient) {
 	        this.refs.videoUrl.value = '';
 	    }
 
+	    handleModeChange(event) {
+	    	this.setState({mode: event.target.value})	
+	    }
+
 
 		render() {
+			const modeOptions = modes.map((mode, index) => {
+				return <option value={mode} key={index}>{mode}</option>;
+			});
+
 			return(
 				<div>
 					<form action="#" onSubmit={this.handleNewContent.bind(this)}>
+						<select
+							value={this.state.mode}
+							onChange={this.handleModeChange.bind(this)}
+							className="mb-3"
+						>
+							{modeOptions}
+						</select>
+
 						<AceEditor
-						    mode="javascript"
+						    mode={this.state.mode}
 						    theme="monokai"
 						    name="UNIQUE_ID_OF_DIV"
 						    editorProps={{$blockScrolling: true}}
-						    width={'100%'}
+						    width={'800px'}
 						    ref="Editor"
 						/>
 						<button className="btn btn-primary" type="submit">Enviar</button>

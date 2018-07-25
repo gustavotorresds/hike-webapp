@@ -144,6 +144,8 @@ if(Meteor.isClient) {
     import brace from 'brace';
     import AceEditor from 'react-ace';
 
+    import 'brace/mode/html';
+    import 'brace/mode/css';
     import 'brace/mode/javascript';
     import 'brace/theme/monokai';
 
@@ -190,12 +192,12 @@ if(Meteor.isClient) {
                      </div>
                      <div className="col-md-8">
                         <AceEditor
-                            mode="javascript"
+                            mode={this.props.content.core.language}
                             theme="monokai"
                             name="UNIQUE_ID_OF_DIV"
                             editorProps={{$blockScrolling: true}}
                             ref="Editor"
-                            value={this.props.content.core}
+                            value={this.props.content.core.code}
                             readOnly={!this.state.editMode}
                         />
                      </div>

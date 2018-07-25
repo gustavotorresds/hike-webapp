@@ -11,6 +11,9 @@ import { StyleSheet, css } from 'aphrodite';
 import { Contents } from '../../api/contents.js';
 import { Lectures } from '../../api/lectures.js';
 
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { monokaiSublime } from 'react-syntax-highlighter/styles/hljs';
+
 class ContentListItem extends Component {
     constructor(props) {
         super(props);
@@ -32,6 +35,12 @@ class ContentListItem extends Component {
                 url: cont.core,
                 type: 'image',
             };
+        } else if(cont.type === 'code') {
+            this.state = {
+                code: cont.core.code,
+                language: cont.core.language,
+                type: 'code',
+            };
         }
     }
 
@@ -47,6 +56,12 @@ class ContentListItem extends Component {
             } else if(this.state.type === 'image') {
                 // TODO: allow different image sizes
                 content = <img className="img-fluid" src={this.state.url}/>
+            } else if(this.state.type === 'code') {
+                // TODO: include file name
+                content = <div>
+                    <div className={css(style.aceHeader)}>{this.state.language}</div>
+                    <SyntaxHighlighter language={this.state.language} style={monokaiSublime}>{this.state.code}</SyntaxHighlighter>;
+                </div>;
             }
         }
 
@@ -92,6 +107,13 @@ export default withTracker((props) => {
 const style = StyleSheet.create({
     contentItem: {
         margin: '0'
+    },
+    aceHeader: {
+        backgroundColor: 'black',
+        color: 'white',
+        textTransform: 'uppercase',
+        padding: '10px',
+        fontSize: '10pt',
     }
 });
 
