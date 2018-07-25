@@ -21,3 +21,7 @@ autopublish@1.0.7             # Publish all data to the clients (for prototyping
 react-meteor-data
 kadira:flow-router
 meteortoys:allthings
+useraccounts:bootstrap
+accounts-password
+softwarerero:accounts-t9n
+accounts-ui
