@@ -7,18 +7,11 @@ import { Lectures } from '../../api/lectures.js';
 class NewImage extends Component {
 	handleNewContent(event) {
 		event.preventDefault();
-
-        const newContentId = Contents.insert({
-            type: 'image',
-            core: this.refs.imageUrl.value,
-            lectureId: this.props.lectureId,
-        });
-
-        Lectures.update(this.props.lectureId, {
-            $push: {
-                'contents': newContentId
-            }
-        });
+		Meteor.call(
+			'addContentToLecture',
+			'image',
+			this.refs.imageUrl.value,
+			this.props.lectureId);
 
         this.refs.imageUrl.value = '';
     }

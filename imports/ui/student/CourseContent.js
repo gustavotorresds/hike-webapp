@@ -60,7 +60,7 @@ class ContentListItem extends Component {
                 // TODO: include file name
                 content = <div>
                     <div className={css(style.aceHeader)}>{this.state.language}</div>
-                    <SyntaxHighlighter language={this.state.language} style={monokaiSublime}>{this.state.code}</SyntaxHighlighter>;
+                    <SyntaxHighlighter language={this.state.language} style={monokaiSublime}>{this.state.code}</SyntaxHighlighter>
                 </div>;
             }
         }

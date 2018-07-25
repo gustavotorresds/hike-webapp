@@ -25,11 +25,12 @@ class EditLecture extends Component {
             this.setState({
               contents: arrayMove(this.state.contents, oldIndex, newIndex),
             });
-            Lectures.update(this.props.lectureId, {
-                $set: {
-                    contents: this.state.contents
-                }
-            });
+            
+            Meteor.call(
+                'updateLectureContents',
+                this.props.lectureId,
+                this.state.contents
+            );
         };
     }
 
@@ -57,11 +58,7 @@ class EditLecture extends Component {
 
         const newTitle = this.refs.lectureTitle.value;
 
-        Lectures.update(this.props.lectureId, {
-            $set: {
-                title: newTitle
-            }
-        });
+        Meteor.call('updateLectureTitle', this.props.lectureId, newTitle);
     }
 
     renderContent() {

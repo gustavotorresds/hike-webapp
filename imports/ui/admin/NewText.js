@@ -26,17 +26,12 @@ class NewText extends Component {
         const editorState = this.state.editorState;
         const renderedHTML = mediumDraftExporter(editorState.getCurrentContent());
 
-        const newContentId = Contents.insert({
-            type: 'text',
-            core: renderedHTML,
-            lectureId: this.props.lectureId,
-        });
-
-        Lectures.update(this.props.lectureId, {
-            $push: {
-                'contents': newContentId
-            }
-        });
+        Meteor.call(
+            'addContentToLecture',
+            'text',
+            renderedHTML,
+            this.props.lectureId
+        );
 
         this.setState({editorState: createEditorState()});
     }

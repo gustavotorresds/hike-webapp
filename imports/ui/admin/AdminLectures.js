@@ -30,11 +30,12 @@ class AdminLectures extends Component {
             this.setState({
                 lectures: arrayMove(this.state.lectures, oldIndex, newIndex),
             });
-            Courses.update(this.props.courseId, {
-                $set: {
-                    lectures: this.state.lectures
-                }
-            });
+
+            Meteor.call(
+                'updateCourseLectures',
+                this.props.courseId,
+                this.state.lectures
+            );
         };
     }
 
@@ -53,32 +54,10 @@ class AdminLectures extends Component {
     }
 
     createLecture() {
-        let newLectureId = Lectures.insert({
-            title: "New Lecture",
-            contents: [],
-            courseId: this.props.courseId,
-        });
-
-        Courses.update(this.props.courseId,
-            {
-                $push: {
-                    lectures: newLectureId
-                }
-            }
-        );
+        Meteor.call('createCourseLecture', this.props.courseId);
     }
 
     renderLectures() {
-        // let lectureList = this.props.course ?
-        //     this.props.course.lectures.map((lectureId) => {
-        //         return <LectureListItem
-        //             key={lectureId}
-        //             courseId={this.props.courseId}
-        //             lectureId={lectureId}
-        //         />
-        //     }) : null;
-        // return <ul>{lectureList}</ul>;
-
         const SortableItem = SortableElement(({value}) =>
           <li className={css(globalStyles.listItem)}><LectureListItem courseId={this.props.courseId} lectureId={value}/></li>
         );

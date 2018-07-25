@@ -8,11 +8,7 @@ class NewCourse extends Component {
         event.preventDefault();
         const title = this.refs.courseTitle.value;
         if(title) {
-            Courses.insert({
-                title: title,
-                lectures: []
-            });
-
+            Meteor.call('createCourse', title);
             this.refs.courseTitle.value = '';
         }
     }

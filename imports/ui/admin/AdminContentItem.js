@@ -35,24 +35,17 @@ if(Meteor.isClient) {
             const editorState = this.state.editorState;
             const renderedHTML = mediumDraftExporter(editorState.getCurrentContent());
 
-            Contents.update(this.props.content._id, {
-                $set: {
-                    core: renderedHTML
-                }
-            })
+            Meteor.call(
+                'updateContent',
+                this.props.content._id,
+                renderedHTML,
+            );
 
             this.setState({editMode: false});
         }
 
         removeContent() {
-            const contentId = this.props.content._id;
-            const lectureId = this.props.content.lectureId;
-            Lectures.update(lectureId, {
-                $pull: {
-                    contents: contentId
-                }
-            });
-            Contents.remove(contentId);
+            Meteor.call('removeLectureContent', this.props.content._id);
         }
 
         render() {
@@ -81,15 +74,7 @@ if(Meteor.isClient) {
 
     class AdminVideoItem extends Component {
         removeContent() {
-            const contentId = this.props.content._id;
-            const lectureId = this.props.content.lectureId;
-            Lectures.update(lectureId, {
-                $pull: {
-                    contents: contentId
-                }
-            });
-            Contents.remove(contentId);
-            
+            Meteor.call('removeLectureContent', this.props.content._id);
         }
 
         render() {
@@ -113,15 +98,7 @@ if(Meteor.isClient) {
 
     class AdminImageItem extends Component {
         removeContent() {
-            const contentId = this.props.content._id;
-            const lectureId = this.props.content.lectureId;
-            Lectures.update(lectureId, {
-                $pull: {
-                    contents: contentId
-                }
-            });
-            Contents.remove(contentId);
-            
+            Meteor.call('removeLectureContent', this.props.content._id);
         }
 
         render() {
@@ -163,25 +140,19 @@ if(Meteor.isClient) {
 
         saveContent() {
             const code = this.refs.Editor.editor.session.getValue();
+            
+            const core = {
+                code: code,
+                language: this.props.content.core.language,
+            }
 
-            Contents.update(this.props.content._id, {
-                $set: {
-                    core: code
-                }
-            })
+            Meteor.call('updateContent', this.props.content._id, core);
 
             this.setState({editMode: false});
         }
 
         removeContent() {
-            const contentId = this.props.content._id;
-            const lectureId = this.props.content.lectureId;
-            Lectures.update(lectureId, {
-                $pull: {
-                    contents: contentId
-                }
-            });
-            Contents.remove(contentId);        
+            Meteor.call('removeLectureContent', this.props.content._id);
         }
 
         render() {

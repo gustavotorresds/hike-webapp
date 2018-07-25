@@ -8,17 +8,12 @@ class NewVideo extends Component {
 	handleNewContent(event) {
 		event.preventDefault();
 
-        const newContentId = Contents.insert({
-            type: 'video',
-            core: this.refs.videoUrl.value,
-            lectureId: this.props.lectureId,
-        });
-
-        Lectures.update(this.props.lectureId, {
-            $push: {
-                'contents': newContentId
-            }
-        });
+		Meteor.call(
+			'addContentToLecture',
+			'video',
+			this.refs.videoUrl.value,
+			this.props.lectureId
+		);
 
         this.refs.videoUrl.value = '';
     }

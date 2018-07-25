@@ -1,3 +1,5 @@
+import { Meteor } from 'meteor/meteor';
+
 /* 
  * This isClient check is a very dirty solution to a problem I ran into
  * implementing the AceEditor. Basically, the server was trying to render
@@ -33,30 +35,16 @@ if(Meteor.isClient) {
 			}
 		}
 
-		onChange(newValue) {
-		  // console.log('change', newValue);
-		}
-
 		handleNewContent(event) {
 			event.preventDefault();
 			const codeContent = this.refs.Editor.editor.session.getValue();
 
-	        const newContentId = Contents.insert({
-	            type: 'code',
-	            core: {
-	            	code: codeContent,
-	            	language: this.state.mode,
-	            },
-	            lectureId: this.props.lectureId,
-	        });
+			const core = {
+            	code: codeContent,
+            	language: this.state.mode,
+            };
 
-	        Lectures.update(this.props.lectureId, {
-	            $push: {
-	                'contents': newContentId
-	            }
-	        });
-
-	        this.refs.videoUrl.value = '';
+	        Meteor.call('addContentToLecture', 'code', core, this.props.lectureId);
 	    }
 
 	    handleModeChange(event) {
