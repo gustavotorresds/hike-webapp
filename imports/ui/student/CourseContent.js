@@ -9,6 +9,7 @@ import { withTracker } from 'meteor/react-meteor-data';
 import { StyleSheet, css } from 'aphrodite';
 
 import { Contents } from '../../api/contents.js';
+import { Lectures } from '../../api/lectures.js';
 
 class ContentListItem extends Component {
     constructor(props) {
@@ -84,7 +85,7 @@ class CourseContent extends Component {
 
 export default withTracker((props) => {
   return {
-    
+    lecture: Lectures.findOne({_id: props.lectureId})
   };
 })(CourseContent);
 

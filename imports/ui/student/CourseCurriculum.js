@@ -40,7 +40,6 @@ class CourseCurriculum extends Component {
     render() {
         return (
             <div>
-                <a href="/courses">Voltar</a>
                 <h1>{this.props.course ? this.props.course.title : ''} Curriculum</h1>
                 {this.renderCurriculum()}
             </div>

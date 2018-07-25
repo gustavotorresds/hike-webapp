@@ -3,20 +3,21 @@ import { withTracker } from 'meteor/react-meteor-data';
 import { StyleSheet, css } from 'aphrodite';
 
 import { Lectures } from '../../api/lectures.js';
+import { Courses } from '../../api/courses.js';
  
 class LectureListItem extends Component {
     render() {
         const lec = Lectures.findOne({_id: this.props.lectureId});
-
-        return (
-            <li>
+        const lecItem = lec ?
                 <a className={
                         css(style.lectureLink, this.props.isChosen && style.highlight)
                     }
                     href={'/courses/' + this.props.courseId + '/lectures/' + lec._id}>
                         {lec.title}
-                </a>
-            </li>
+                </a> : '';
+
+        return (
+            <li>{lecItem}</li>
         );
     }
 }
@@ -49,7 +50,7 @@ class CourseNav extends Component {
 
 export default withTracker((props) => {
     return {
-
+        course: Courses.findOne({_id: props.courseId}),
     };
 })(CourseNav);
 

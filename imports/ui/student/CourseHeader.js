@@ -4,9 +4,8 @@ import { StyleSheet, css } from 'aphrodite';
 
 class CourseHeader extends Component {
 	render() {
-		return (<div>
-			<a href={'/courses/' + this.props.courseId}>Voltar</a>
-			<span>HEADER</span>
+		return (<div className={css(style.headerContainer)}>
+			<a className={css(style.link)} href={this.props.prevPage}>Voltar</a>
 		</div>);
 	}
 }
@@ -16,3 +15,14 @@ export default withTracker((props) => {
 
 	};
 })(CourseHeader);
+
+const style = StyleSheet.create({
+	headerContainer: {
+		backgroundColor: '#0055A0',
+		color: 'white',
+		padding: '12px',
+	},
+	link: {
+		color: 'white',
+	}
+});
