@@ -11,171 +11,247 @@ import mediumDraftExporter from 'medium-draft/lib/exporter';
 import { Lectures } from '../../api/lectures.js';
 import { Contents } from '../../api/contents.js';
 
-class AdminTextItem extends Component {
-    constructor(props) {
-        super(props);
+if(Meteor.isClient) {
+    class AdminTextItem extends Component {
+        constructor(props) {
+            super(props);
 
-        const html = this.props.content.core;
-        this.state = {
-            editorState: createEditorState(convertToRaw(mediumDraftImporter(html))),
-            editMode: false,
+            const html = this.props.content.core;
+            this.state = {
+                editorState: createEditorState(convertToRaw(mediumDraftImporter(html))),
+                editMode: false,
+            }
+
+            this.onChange = (editorState) => {
+                this.setState({ editorState });
+            };
         }
 
-        this.onChange = (editorState) => {
-            this.setState({ editorState });
-        };
-    }
+        editContent() {
+            this.setState({editMode: true});
+        }
 
-    editContent() {
-        this.setState({editMode: true});
-    }
+        saveContent() {
+            const editorState = this.state.editorState;
+            const renderedHTML = mediumDraftExporter(editorState.getCurrentContent());
 
-    saveContent() {
-        const editorState = this.state.editorState;
-        const renderedHTML = mediumDraftExporter(editorState.getCurrentContent());
+            Contents.update(this.props.content._id, {
+                $set: {
+                    core: renderedHTML
+                }
+            })
 
-        Contents.update(this.props.content._id, {
-            $set: {
-                core: renderedHTML
-            }
-        })
+            this.setState({editMode: false});
+        }
 
-        this.setState({editMode: false});
-    }
+        removeContent() {
+            const contentId = this.props.content._id;
+            const lectureId = this.props.content.lectureId;
+            Lectures.update(lectureId, {
+                $pull: {
+                    contents: contentId
+                }
+            });
+            Contents.remove(contentId);
+        }
 
-    removeContent() {
-        const contentId = this.props.content._id;
-        const lectureId = this.props.content.lectureId;
-        Lectures.update(lectureId, {
-            $pull: {
-                contents: contentId
-            }
-        });
-        Contents.remove(contentId);
-    }
-
-    render() {
-        return (
-             <div className="row">
-                 <div className="col-md-2">
-                    Text
+        render() {
+            return (
+                 <div className="row">
+                     <div className="col-md-2">
+                        Text
+                     </div>
+                     <div className="col-md-8">
+                        <Editor
+                            editorState={this.state.editorState}
+                            onChange={this.onChange}
+                            editorEnabled={this.state.editMode}/>
+                     </div>
+                     <div className="col-md-2">
+                         {this.state.editMode ?
+                             <button onClick={this.saveContent.bind(this)} className="btn btn-success mb-3">Salvar</button> :
+                             <button onClick={this.editContent.bind(this)} className="btn btn-warning mb-3">Editar</button>
+                         }
+                         <button onClick={this.removeContent.bind(this)} className="btn btn-danger">Remover</button>
+                     </div>
                  </div>
-                 <div className="col-md-8">
-                    <Editor
-                        editorState={this.state.editorState}
-                        onChange={this.onChange}
-                        editorEnabled={this.state.editMode}/>
-                 </div>
-                 <div className="col-md-2">
-                     {this.state.editMode ?
-                         <button onClick={this.saveContent.bind(this)} className="btn btn-success mb-3">Salvar</button> :
-                         <button onClick={this.editContent.bind(this)} className="btn btn-warning mb-3">Editar</button>
-                     }
-                     <button onClick={this.removeContent.bind(this)} className="btn btn-danger">Remover</button>
-                 </div>
-             </div>
-        );
-    }
-}
-
-class AdminVideoItem extends Component {
-    removeContent() {
-        const contentId = this.props.content._id;
-        const lectureId = this.props.content.lectureId;
-        Lectures.update(lectureId, {
-            $pull: {
-                contents: contentId
-            }
-        });
-        Contents.remove(contentId);
-        
+            );
+        }
     }
 
-    render() {
-        return (
-            <div className="row">
-                <div className="col-md-2">
-                    Video
-                </div>
-                <div className="col-md-8">
-                    <div className="embed-responsive embed-responsive-16by9 mb-5">
-                        <iframe className="embed-responsive-item" src={this.props.content.core} allowFullScreen></iframe>
+    class AdminVideoItem extends Component {
+        removeContent() {
+            const contentId = this.props.content._id;
+            const lectureId = this.props.content.lectureId;
+            Lectures.update(lectureId, {
+                $pull: {
+                    contents: contentId
+                }
+            });
+            Contents.remove(contentId);
+            
+        }
+
+        render() {
+            return (
+                <div className="row">
+                    <div className="col-md-2">
+                        Video
+                    </div>
+                    <div className="col-md-8">
+                        <div className="embed-responsive embed-responsive-16by9 mb-5">
+                            <iframe className="embed-responsive-item" src={this.props.content.core} allowFullScreen></iframe>
+                        </div>
+                    </div>
+                    <div className="col-md-2">
+                        <button onClick={this.removeContent.bind(this)} className="btn btn-danger">Remover</button>
                     </div>
                 </div>
-                <div className="col-md-2">
-                    <button onClick={this.removeContent.bind(this)} className="btn btn-danger">Remover</button>
-                </div>
-            </div>
-        );
-    }    
-}
-
-class AdminImageItem extends Component {
-    removeContent() {
-        const contentId = this.props.content._id;
-        const lectureId = this.props.content.lectureId;
-        Lectures.update(lectureId, {
-            $pull: {
-                contents: contentId
-            }
-        });
-        Contents.remove(contentId);
-        
+            );
+        }    
     }
 
-    render() {
-        return (
-             <div className="row">
-                 <div className="col-md-2">
-                    Image
-                 </div>
-                 <div className="col-md-8">
-                    <img className="img-fluid" src={this.props.content.core}/>
-                 </div>
-                 <div className="col-md-2">
-                     <button onClick={this.removeContent.bind(this)} className="btn btn-danger">Remover</button>
-                 </div>
-             </div>
-        );
-    }    
-}
+    class AdminImageItem extends Component {
+        removeContent() {
+            const contentId = this.props.content._id;
+            const lectureId = this.props.content.lectureId;
+            Lectures.update(lectureId, {
+                $pull: {
+                    contents: contentId
+                }
+            });
+            Contents.remove(contentId);
+            
+        }
 
-class AdminContentItem extends Component {
-	render() {
-        let contentDisplay = null;
+        render() {
+            return (
+                 <div className="row">
+                     <div className="col-md-2">
+                        Image
+                     </div>
+                     <div className="col-md-8">
+                        <img className="img-fluid" src={this.props.content.core}/>
+                     </div>
+                     <div className="col-md-2">
+                         <button onClick={this.removeContent.bind(this)} className="btn btn-danger">Remover</button>
+                     </div>
+                 </div>
+            );
+        }    
+    }
 
-        if(this.props) {
-            const content = this.props.content;
+    import brace from 'brace';
+    import AceEditor from 'react-ace';
 
-            if(content.type === 'text') {
-                contentDisplay = <AdminTextItem content={content}/>;
-            } else if(content.type === 'video') {
-                contentDisplay = <AdminVideoItem content={content}/>;
-            } else if(content.type === 'image') {
-                contentDisplay = <AdminImageItem content={content}/>;
+    import 'brace/mode/javascript';
+    import 'brace/theme/monokai';
+
+    class AdminCodeItem extends Component {
+        constructor(props) {
+            super(props);
+            this.state = {
+                editMode: false,
             }
         }
 
-        return (<li className={css(style.container)}>
-            {contentDisplay}
-        </li>);
+        editContent() {
+            this.setState({editMode: true});
+        } 
+
+        saveContent() {
+            const code = this.refs.Editor.editor.session.getValue();
+
+            Contents.update(this.props.content._id, {
+                $set: {
+                    core: code
+                }
+            })
+
+            this.setState({editMode: false});
+        }
+
+        removeContent() {
+            const contentId = this.props.content._id;
+            const lectureId = this.props.content.lectureId;
+            Lectures.update(lectureId, {
+                $pull: {
+                    contents: contentId
+                }
+            });
+            Contents.remove(contentId);        
+        }
+
+        render() {
+            return (
+                 <div className="row">
+                     <div className="col-md-2">
+                        Code
+                     </div>
+                     <div className="col-md-8">
+                        <AceEditor
+                            mode="javascript"
+                            theme="monokai"
+                            name="UNIQUE_ID_OF_DIV"
+                            editorProps={{$blockScrolling: true}}
+                            ref="Editor"
+                            value={this.props.content.core}
+                            readOnly={!this.state.editMode}
+                        />
+                     </div>
+                     <div className="col-md-2">
+                        {this.state.editMode ?
+                             <button onClick={this.saveContent.bind(this)} className="btn btn-success mb-3">Salvar</button> :
+                             <button onClick={this.editContent.bind(this)} className="btn btn-warning mb-3">Editar</button>
+                         }
+                         <button onClick={this.removeContent.bind(this)} className="btn btn-danger">Remover</button>
+                     </div>
+                 </div>
+            );
+        }
     }
+
+    class AdminContentItem extends Component {
+    	render() {
+            let contentDisplay = null;
+
+            if(this.props) {
+                const content = this.props.content;
+
+                if(content.type === 'text') {
+                    contentDisplay = <AdminTextItem content={content}/>;
+                } else if(content.type === 'video') {
+                    contentDisplay = <AdminVideoItem content={content}/>;
+                } else if(content.type === 'image') {
+                    contentDisplay = <AdminImageItem content={content}/>;
+                } else if(content.type === 'code') {
+                    contentDisplay = <AdminCodeItem content={content}/>;
+                } else {
+                    contentDisplay = <div>Conteúdo não suportado</div>
+                }
+            }
+
+            return (<li className={css(style.container)}>
+                {contentDisplay}
+            </li>);
+        }
+    }
+
+    export default withTracker((props) => {
+    	return {
+            content: Contents.findOne({_id: props.contentId}),
+    	};
+    })(AdminContentItem);
+
+    const style = StyleSheet.create({
+    	container: {
+    		marginTop: '20px',
+    		backgroundColor: 'white',
+    		padding: '20px',
+            ':hover': {
+                cursor: 'grab',
+                boxShadow: '0 2px',
+            },
+    	}
+    });
 }
-
-export default withTracker((props) => {
-	return {
-        content: Contents.findOne({_id: props.contentId}),
-	};
-})(AdminContentItem);
-
-const style = StyleSheet.create({
-	container: {
-		marginTop: '20px',
-		backgroundColor: 'white',
-		padding: '20px',
-        ':hover': {
-            cursor: 'grab',
-            boxShadow: '0 2px',
-        },
-	}
-});
