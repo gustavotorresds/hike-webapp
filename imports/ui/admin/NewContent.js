@@ -6,6 +6,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import NewText from './NewText.js';
 import NewVideo from './NewVideo.js';
 import NewImage from './NewImage.js';
+import NewCode from './NewCode.js';
 
 import { Contents } from '../../api/contents.js';
 import { Lectures } from '../../api/lectures.js';
@@ -21,6 +22,7 @@ class NewContent extends Component {
 			      <Tab className={css(style.tabTitle)}>Rich Text</Tab>
 			      <Tab className={css(style.tabTitle)}>Video URL</Tab>
 			      <Tab className={css(style.tabTitle)}>Image URL</Tab>
+			      <Tab className={css(style.tabTitle)}>Code</Tab>
 			    </TabList>
 
 			    <TabPanel className={css(style.tabPanel)}>
@@ -31,6 +33,9 @@ class NewContent extends Component {
 			    </TabPanel>
 			    <TabPanel className={css(style.tabPanel)}>
 			     	<NewImage lectureId={this.props.lectureId}/>
+			    </TabPanel>
+			    <TabPanel className={css(style.tabPanel)}>
+			     	<NewCode lectureId={this.props.lectureId}/>
 			    </TabPanel>
 		  </Tabs>
 		);
