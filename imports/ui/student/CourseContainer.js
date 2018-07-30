@@ -11,16 +11,15 @@ import { Lectures } from '../../api/lectures.js';
 
 class CourseContainer extends Component {
 	render() {
-		const main = this.props.main;
-		const nav = main.props.lectureId ?
-			<CourseNav courseId={main.props.courseId} lectureId={main.props.lectureId}/> :
-			<h5>Course Info</h5>;
+		const nav = this.props.lectureId ?
+			<CourseNav courseId={this.props.courseId} lectureId={this.props.lectureId}/> :
+			'';
 
 		return (
 			<div className="container-fluid">
 				<div className="row">
 					<div className={'col-md-12 ' + css(style.header)}>
-						<CourseHeader prevPage={this.props.main.props.prevPage}/>
+						<CourseHeader courseId={this.props.courseId}/>
 					</div>
 				</div>
 				<div className="row">
@@ -28,7 +27,9 @@ class CourseContainer extends Component {
 			            {nav}
 			        </div>
 			        <div className="col-md-9">
-			        	{main}
+			        	<CourseContent
+				          courseId={this.props.courseId}
+				          lectureId={this.props.lectureId}/>
 			        </div>
 			    </div>
 		    </div>

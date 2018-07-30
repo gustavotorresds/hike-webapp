@@ -5,7 +5,7 @@ import { StyleSheet, css } from 'aphrodite';
 class CourseHeader extends Component {
 	render() {
 		return (<div className={css(style.headerContainer)}>
-			<a className={css(style.link)} href={this.props.prevPage}>Voltar</a>
+			<a className={css(style.link)} href={'/courses/' + this.props.courseId}>Voltar</a>
 		</div>);
 	}
 }
