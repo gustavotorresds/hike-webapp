@@ -26,7 +26,7 @@ Meteor.methods({
 	},
     'removeLectureContent': function(contentId) {
         var loggedInUser = Meteor.user()
-        if (!loggedInUser || !Roles.userIsInRole(loggedInUser, ['admin'])) {
+        if (!loggedInUser || !Roles.userIsInRole(loggedInUser, ['admin'], 'default-group')) {
           throw new Meteor.Error(403, "Access denied");
         }
 
@@ -42,7 +42,7 @@ Meteor.methods({
     },
     'updateContent': function(contentId, core) {
         var loggedInUser = Meteor.user()
-        if (!loggedInUser || !Roles.userIsInRole(loggedInUser, ['admin'])) {
+        if (!loggedInUser || !Roles.userIsInRole(loggedInUser, ['admin'], 'default-group')) {
           throw new Meteor.Error(403, "Access denied");
         }
 
@@ -54,7 +54,7 @@ Meteor.methods({
     },
     'updateLectureTitle': function(lectureId, newTitle) {
         var loggedInUser = Meteor.user()
-        if (!loggedInUser || !Roles.userIsInRole(loggedInUser, ['admin'])) {
+        if (!loggedInUser || !Roles.userIsInRole(loggedInUser, ['admin'], 'default-group')) {
           throw new Meteor.Error(403, "Access denied");
         }
 
@@ -66,7 +66,7 @@ Meteor.methods({
     },
     'updateLectureContents': function(lectureId, contentIds) {
         var loggedInUser = Meteor.user()
-        if (!loggedInUser || !Roles.userIsInRole(loggedInUser, ['admin'])) {
+        if (!loggedInUser || !Roles.userIsInRole(loggedInUser, ['admin'], 'default-group')) {
           throw new Meteor.Error(403, "Access denied");
         }
 
@@ -78,7 +78,7 @@ Meteor.methods({
     },
     'updateCourseLectures': function(courseId, lectureIds) {
         var loggedInUser = Meteor.user()
-        if (!loggedInUser || !Roles.userIsInRole(loggedInUser, ['admin'])) {
+        if (!loggedInUser || !Roles.userIsInRole(loggedInUser, ['admin'], 'default-group')) {
           throw new Meteor.Error(403, "Access denied");
         }
 
@@ -90,7 +90,7 @@ Meteor.methods({
     },
     'createCourseLecture': function(courseId) {
         var loggedInUser = Meteor.user()
-        if (!loggedInUser || !Roles.userIsInRole(loggedInUser, ['admin'])) {
+        if (!loggedInUser || !Roles.userIsInRole(loggedInUser, ['admin'], 'default-group')) {
           throw new Meteor.Error(403, "Access denied");
         }
 
@@ -109,14 +109,39 @@ Meteor.methods({
         );
     },
     'createCourse': function(title) {
-        var loggedInUser = Meteor.user()
-        if (!loggedInUser || !Roles.userIsInRole(loggedInUser, ['admin'])) {
+        var loggedInUser = Meteor.user();
+        if (!loggedInUser || !Roles.userIsInRole(loggedInUser, ['admin'], 'default-group')) {
           throw new Meteor.Error(403, "Access denied");
         }
 
         Courses.insert({
             title: title,
-            lectures: []
+            lectures: [],
+            students: []
+        });
+    },
+    'addStudentToCourse': function(studentId, courseId) {
+        var loggedInUser = Meteor.user();
+        if (!loggedInUser || !Roles.userIsInRole(loggedInUser, ['admin'], 'default-group')) {
+          throw new Meteor.Error(403, "Access denied");
+        }
+
+        Courses.update(courseId, {
+            $addToSet: {
+                'students': studentId
+            } 
+        });
+    },
+    'removeStudentFromCourse': function(studentId, courseId) {
+        var loggedInUser = Meteor.user();
+        if (!loggedInUser || !Roles.userIsInRole(loggedInUser, ['admin'], 'default-group')) {
+          throw new Meteor.Error(403, "Access denied");
+        }
+
+        Courses.update(courseId, {
+            $pull: {
+                'students': studentId
+            } 
         });
     }
 });
