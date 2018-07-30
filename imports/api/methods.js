@@ -4,6 +4,14 @@ import { Lectures } from './lectures.js';
 
 Meteor.methods({
 	'addContentToLecture': function(type, core, lectureId) {
+        var loggedInUser = Meteor.user();
+
+        console.log(loggedInUser);
+
+        if (!loggedInUser || !Roles.userIsInRole(loggedInUser, ['admin'], 'default-group')) {
+          throw new Meteor.Error(403, "Access denied");
+        }
+
 		const newContentId = Contents.insert({
             type: type,
             core: core,
@@ -17,6 +25,11 @@ Meteor.methods({
         });
 	},
     'removeLectureContent': function(contentId) {
+        var loggedInUser = Meteor.user()
+        if (!loggedInUser || !Roles.userIsInRole(loggedInUser, ['admin'])) {
+          throw new Meteor.Error(403, "Access denied");
+        }
+
         const content = Contents.findOne({_id: contentId});
         const lectureId = content.lectureId;
 
@@ -28,6 +41,11 @@ Meteor.methods({
         Contents.remove(contentId);
     },
     'updateContent': function(contentId, core) {
+        var loggedInUser = Meteor.user()
+        if (!loggedInUser || !Roles.userIsInRole(loggedInUser, ['admin'])) {
+          throw new Meteor.Error(403, "Access denied");
+        }
+
         Contents.update(contentId, {
             $set: {
                 core: core
@@ -35,6 +53,11 @@ Meteor.methods({
         });
     },
     'updateLectureTitle': function(lectureId, newTitle) {
+        var loggedInUser = Meteor.user()
+        if (!loggedInUser || !Roles.userIsInRole(loggedInUser, ['admin'])) {
+          throw new Meteor.Error(403, "Access denied");
+        }
+
         Lectures.update(lectureId, {
             $set: {
                 title: newTitle
@@ -42,6 +65,11 @@ Meteor.methods({
         });
     },
     'updateLectureContents': function(lectureId, contentIds) {
+        var loggedInUser = Meteor.user()
+        if (!loggedInUser || !Roles.userIsInRole(loggedInUser, ['admin'])) {
+          throw new Meteor.Error(403, "Access denied");
+        }
+
         Lectures.update(lectureId, {
             $set: {
                 contents: contentIds
@@ -49,6 +77,11 @@ Meteor.methods({
         });
     },
     'updateCourseLectures': function(courseId, lectureIds) {
+        var loggedInUser = Meteor.user()
+        if (!loggedInUser || !Roles.userIsInRole(loggedInUser, ['admin'])) {
+          throw new Meteor.Error(403, "Access denied");
+        }
+
         Courses.update(courseId, {
             $set: {
                 lectures: lectureIds
@@ -56,6 +89,11 @@ Meteor.methods({
         });
     },
     'createCourseLecture': function(courseId) {
+        var loggedInUser = Meteor.user()
+        if (!loggedInUser || !Roles.userIsInRole(loggedInUser, ['admin'])) {
+          throw new Meteor.Error(403, "Access denied");
+        }
+
         let newLectureId = Lectures.insert({
             title: "New Lecture",
             contents: [],
@@ -71,6 +109,11 @@ Meteor.methods({
         );
     },
     'createCourse': function(title) {
+        var loggedInUser = Meteor.user()
+        if (!loggedInUser || !Roles.userIsInRole(loggedInUser, ['admin'])) {
+          throw new Meteor.Error(403, "Access denied");
+        }
+
         Courses.insert({
             title: title,
             lectures: []
