@@ -26,3 +26,4 @@ accounts-password
 softwarerero:accounts-t9n
 accounts-ui
 alanning:roles
+gwendall:auth-client-callbacks

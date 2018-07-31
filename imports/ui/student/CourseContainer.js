@@ -4,12 +4,39 @@ import { StyleSheet, css } from 'aphrodite';
 
 import CourseHeader from './CourseHeader.js';
 import CourseNav from './CourseNav.js';
+import ContentNav from './ContentNav.js';
 import CourseContent from './CourseContent.js';
 
 import { Courses } from '../../api/courses.js';
 import { Lectures } from '../../api/lectures.js';
 
 class CourseContainer extends Component {
+	nextLecture() {
+		if(this.props.course) {
+			const lectures = this.props.course.lectures;
+			const lectureIndex = lectures.indexOf(this.props.lectureId);
+			const nextLectureIndex = lectureIndex + 1;
+			if(nextLectureIndex < lectures.length) {
+				return lectures[nextLectureIndex];
+			}
+		}
+
+		return -1;
+	}
+
+	prevLecture() {
+		if(this.props.course) {
+			const lectures = this.props.course.lectures;
+			const lectureIndex = lectures.indexOf(this.props.lectureId);
+			const nextLectureIndex = lectureIndex - 1;
+			if(nextLectureIndex >= 0) {
+				return lectures[nextLectureIndex];
+			}
+		}
+
+		return -1;
+	}
+
 	hasAccess() {
 		var userId = Meteor.userId();
 		if(Roles.userIsInRole(userId, ['admin'], 'default-group')) {
@@ -19,7 +46,7 @@ class CourseContainer extends Component {
 		const students = this.props.course && this.props.course.students ?
 			this.props.course.students :
 			[];
-			
+
 		return students.indexOf(userId) !== -1;
 	}
 
@@ -31,15 +58,20 @@ class CourseContainer extends Component {
 		return (
 			<div className="container-fluid">
 				<div className="row">
-					<div className={'col-md-12 ' + css(style.header)}>
-						<CourseHeader courseId={this.props.courseId}/>
-					</div>
-				</div>
-				<div className="row">
 			        <div className={'col-md-3 ' + css(style.nav)}>
+			        	<div className="row">
+							<div className={'col-md-12 ' + css(style.header)}>
+								<CourseHeader courseId={this.props.courseId}/>
+							</div>
+						</div>
 			            {nav}
 			        </div>
 			        <div className="col-md-9">
+		        		<ContentNav
+		        			courseId={this.props.courseId}
+		        			prevLectureId={this.prevLecture()}
+		        			nextLectureId={this.nextLecture()}
+		        		/>
 			        	<CourseContent
 				          courseId={this.props.courseId}
 				          lectureId={this.props.lectureId}
@@ -59,7 +91,6 @@ export default withTracker((props) => {
 
 const style = StyleSheet.create({
 	nav: {
-		padding: '0',
 		backgroundColor: '#F6F6F6',
         borderRight: '1px solid #E7E7E7',
 	},
