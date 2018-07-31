@@ -5,9 +5,6 @@ import { Lectures } from './lectures.js';
 Meteor.methods({
 	'addContentToLecture': function(type, core, lectureId) {
         var loggedInUser = Meteor.user();
-
-        console.log(loggedInUser);
-
         if (!loggedInUser || !Roles.userIsInRole(loggedInUser, ['admin'], 'default-group')) {
           throw new Meteor.Error(403, "Access denied");
         }

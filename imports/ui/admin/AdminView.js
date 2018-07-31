@@ -12,6 +12,17 @@ import { NavButton } from '../AccountsWrapper.js';
 
 class AdminView extends Component {
 	render() {
+		if(!this.props.isAdmin) {
+			return (<div className="container">
+				<div className="row justify-content-center text-center">
+					<div className="col-md-6">
+						<img className="img-fluid mt-5" src="/forbidden.png"/>
+						<h1>Ops, tem certeza de que deveria estar aqui?</h1>
+					</div>
+				</div>
+			</div>);
+		}
+
 		return (
 			<div className="container-fluid">
 				<div className="row">
@@ -36,6 +47,7 @@ class AdminView extends Component {
 
 export default withTracker((props) => {
 	return {
-		userId: Meteor.userId()
+		userId: Meteor.userId(),
+		isAdmin: Roles.userIsInRole(Meteor.userId(), ['admin'], 'default-group'),
 	};
 })(AdminView);
