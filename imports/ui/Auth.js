@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {StyleSheet, css} from 'aphrodite';
 
 import { SignUp } from './AccountsWrapper.js';
+import { withTracker } from 'meteor/react-meteor-data';
 
 class SignUpPage extends Component {
 	render() {
@@ -17,7 +18,11 @@ class SignUpPage extends Component {
 	}
 }
 
-export default SignUpPage
+export default withTracker((props) => {
+	return {
+
+	};
+})(SignUpPage);
 
 const style = StyleSheet.create({
 	signUpContainer: {

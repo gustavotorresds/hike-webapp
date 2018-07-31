@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Template } from 'meteor/templating';
 import { Blaze } from 'meteor/blaze';
+import { withTracker } from 'meteor/react-meteor-data';
  
-class NavButton extends Component {
+class NavButtonRaw extends Component {
   componentDidMount() {
     // Use Meteor Blaze to render login buttons
     this.view = Blaze.render(Template.atNavButton,
@@ -21,7 +22,13 @@ class NavButton extends Component {
   }
 }
 
-class SignUp extends Component {
+const NavButton = withTracker((props) => {
+  return {
+
+  };
+})(NavButtonRaw);
+
+class SignUpRaw extends Component {
   componentDidMount() {
     // Use Meteor Blaze to render login buttons
     this.view = Blaze.render(Template.atForm,
@@ -38,5 +45,11 @@ class SignUp extends Component {
     return <span ref="container" />;
   }
 }
+
+const SignUp = withTracker((props) => {
+  return {
+
+  };
+})(SignUpRaw);
 
 export { NavButton, SignUp };

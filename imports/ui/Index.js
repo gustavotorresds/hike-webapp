@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
- 
-// Task component - represents a single todo item
-export default class Index extends Component {
+
+import { withTracker } from 'meteor/react-meteor-data';
+
+class Index extends Component {
     render() {
         return (
             <div>
@@ -10,3 +11,9 @@ export default class Index extends Component {
         );
     }
 }
+
+export default withTracker((props) => {
+	return {
+
+	};
+})(Index);
