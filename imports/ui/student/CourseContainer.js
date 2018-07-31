@@ -10,6 +10,19 @@ import { Courses } from '../../api/courses.js';
 import { Lectures } from '../../api/lectures.js';
 
 class CourseContainer extends Component {
+	hasAccess() {
+		var userId = Meteor.userId();
+		if(Roles.userIsInRole(userId, ['admin'], 'default-group')) {
+			return true;
+		}
+
+		const students = this.props.course && this.props.course.students ?
+			this.props.course.students :
+			[];
+			
+		return students.indexOf(userId) !== -1;
+	}
+
 	render() {
 		const nav = this.props.lectureId ?
 			<CourseNav courseId={this.props.courseId} lectureId={this.props.lectureId}/> :
@@ -29,7 +42,8 @@ class CourseContainer extends Component {
 			        <div className="col-md-9">
 			        	<CourseContent
 				          courseId={this.props.courseId}
-				          lectureId={this.props.lectureId}/>
+				          lectureId={this.props.lectureId}
+				          hasAccess={this.hasAccess()}/>
 			        </div>
 			    </div>
 		    </div>
@@ -39,7 +53,7 @@ class CourseContainer extends Component {
 
 export default withTracker((props) => {
 	return {
-
+		course: Courses.findOne({_id: props.courseId})
 	};
 })(CourseContainer);
 

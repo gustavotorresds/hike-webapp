@@ -89,10 +89,28 @@ class CourseContent extends Component {
     }
 
     render() {
+        const content = this.props.hasAccess ?
+            <div>{this.renderContents()}</div> :
+            <div className={css(style.blockedContainer)}>
+                <div className="row justify-content-center">
+                    <div class="col-md-4">
+                        <div className="text-center">
+                            Oi! :) Que bom que vc tem interesse na Hike! Para ter acesso, é só clicar no botão abaixo!
+                        </div>
+                        <img className="img-fluid" src="/locker.png"/>
+                    </div>
+                </div>
+                <div className="row justify-content-center">
+                    <div className="col-md-6 text-center">
+                        <a class="btn btn-primary" href="/pagamento">Quero esse curso f0d#@!</a>
+                    </div>
+                </div>
+            </div>;
+
         return (
             <div>
                 <h2>{this.props.lecture ? this.props.lecture.title : ''}</h2>
-                {this.renderContents()}
+                {content}                
             </div>
         );
     }
@@ -114,37 +132,9 @@ const style = StyleSheet.create({
         textTransform: 'uppercase',
         padding: '10px',
         fontSize: '10pt',
+    },
+    blockedContainer: {
+        backgroundColor: '#E5E5E5',
+        padding: '50px',
     }
 });
-
-// import { convertToRaw } from 'draft-js';
-// import { Editor, createEditorState } from 'medium-draft';
-// import mediumDraftImporter from 'medium-draft/lib/importer';
-// constructor(props) {
-//     super(props);
-
-//     const con = Contents.findOne({_id: this.props.contentId});
-//     if(con.type === 'text') {
-//         const html = con.core;
-//         this.state = {
-//             // editorState: createEditorState(convertToRaw(mediumDraftImporter(html))),
-//             rawHtml: html,
-//             type: 'text',
-//         };
-
-//         // this.onChange = (editorState) => {
-//         //     this.setState({ editorState });
-//         // };
-//     } else if(con.type === 'video') {
-//         console.log('Displaying a video');
-//         this.state = {
-//             url: con.core,
-//             type: 'video',
-//         }
-//     }
-// }
-//
-// content = <Editor
-//     editorState={this.state ? this.state.editorState : ''}
-//     onChange={this.onChange}
-//     editorEnabled={false}/>;
