@@ -14,33 +14,37 @@ import { Lectures } from '../../api/lectures.js';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { monokaiSublime } from 'react-syntax-highlighter/styles/hljs';
 
-class ContentListItem extends Component {
-    constructor(props) {
-        super(props);
+class ContentListItemRaw extends Component {
+    componentDidUpdate(prevProps, prevState) {
+        if(prevProps !== this.props) {
+            const cont = this.props.content;
+            if(!cont) {
+                console.log('RETURNING');
+                return;
+            }
 
-        // Set state according to content.
-        const cont = Contents.findOne({_id: this.props.contentId});
-        if(cont.type === 'text') {
-            this.state = {
-                rawHtml: cont.core,
-                type: 'text',
-            };
-        } else if(cont.type === 'video') {
-            this.state = {
-                url: cont.core,
-                type: 'video',
-            };
-        } else if (cont.type === 'image') {
-            this.state = {
-                url: cont.core,
-                type: 'image',
-            };
-        } else if(cont.type === 'code') {
-            this.state = {
-                code: cont.core.code,
-                language: cont.core.language,
-                type: 'code',
-            };
+            if(cont.type === 'text') {
+                this.setState({
+                    rawHtml: cont.core,
+                    type: 'text',
+                });
+            } else if(cont.type === 'video') {
+                this.setState({
+                    url: cont.core,
+                    type: 'video',
+                });
+            } else if (cont.type === 'image') {
+                this.setState({
+                    url: cont.core,
+                    type: 'image',
+                });
+            } else if(cont.type === 'code') {
+                this.setState({
+                    code: cont.core.code,
+                    language: cont.core.language,
+                    type: 'code',
+                });
+            }
         }
     }
 
@@ -77,9 +81,17 @@ class ContentListItem extends Component {
     }
 }
 
+const ContentListItem = withTracker((props) => {
+    Meteor.subscribe('content', props.contentId);
+
+    return {
+        content: Contents.findOne({_id: props.contentId}),
+    }
+})(ContentListItemRaw);
+
 class CourseContent extends Component {
     renderContents() {
-        if(this.props.lecture) {
+        if(this.props.lecture && this.props.lecture.contents) {
             const contentsList = this.props.lecture.contents.map((contentId) => {
                 return <ContentListItem key={contentId} contentId={contentId}/>
             });
@@ -117,9 +129,11 @@ class CourseContent extends Component {
 }
 
 export default withTracker((props) => {
-  return {
-    lecture: Lectures.findOne({_id: props.lectureId})
-  };
+    Meteor.subscribe('lecture', props.lectureId);
+
+    return {
+        lecture: Lectures.findOne({_id: props.lectureId})
+    };
 })(CourseContent);
 
 const style = StyleSheet.create({

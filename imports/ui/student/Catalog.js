@@ -39,9 +39,11 @@ class Catalog extends Component {
 }
 
 export default withTracker((props) => {
-  return {
-    courses: Courses.find({}).fetch()
-  };
+    Meteor.subscribe('coursesBasic');
+
+    return {
+        courses: Courses.find({}).fetch()
+    };
 })(Catalog);
 
 

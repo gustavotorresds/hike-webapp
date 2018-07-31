@@ -7,18 +7,16 @@ import globalStyles from '../globalStyles.js';
 import { Courses } from '../../api/courses.js';
 import { Lectures } from '../../api/lectures.js';
 
-class Lecture extends Component {
+class LectureRaw extends Component {
     render() {
-        const lec = Lectures.findOne({_id: this.props.lectureId});
-
         return (
             <div>
                 <li className={css(globalStyles.listItem)}>
                     <a
-                    href={'/courses/' + this.props.courseId + '/lectures/' + lec._id}
+                    href={'/courses/' + this.props.courseId + '/lectures/' + (this.props.lecture ? this.props.lecture._id : '')}
                     className={css(globalStyles.listLink)}
                     >
-                    {lec.title}
+                    {this.props.lecture ? this.props.lecture.title : ''}
                     </a>
                 </li>
             </div>
@@ -26,10 +24,18 @@ class Lecture extends Component {
     }
 }
 
+const Lecture = withTracker((props) => {
+    Meteor.subscribe('lectureBasic', props.lectureId);
+
+    return {
+        lecture: Lectures.findOne({_id: props.lectureId}),
+    };
+})(LectureRaw);
+
 class CourseCurriculum extends Component {
     renderCurriculum() {
         const course = this.props.course;
-        if(course) {
+        if(course && course.lectures) {
             const curriculum = course.lectures.map((lectureId) => {
                 return <Lecture key={lectureId} courseId={this.props.courseId} lectureId={lectureId}/>
             });
@@ -48,7 +54,9 @@ class CourseCurriculum extends Component {
 }
 
 export default withTracker((props) => {
-  return {
-    course: Courses.findOne({_id: props.courseId})
-  };
+    Meteor.subscribe('course', props.courseId);
+
+    return {
+        course: Courses.findOne({_id: props.courseId})
+    };
 })(CourseCurriculum);

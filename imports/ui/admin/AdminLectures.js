@@ -9,23 +9,35 @@ import globalStyles from '../globalStyles.js';
 import { Courses } from '../../api/courses.js';
 import { Lectures } from '../../api/lectures.js';
 
-class LectureListItem extends Component {
+class LectureListItemRaw extends Component {
     render() {
-        // TODO: Check if here's the best place to fetch info. Prob not.
-        const lectureInfo = Lectures.findOne({_id: this.props.lectureId});
+        const lectureInfo = this.props.lectureInfo;
 
         return (
-            <a className={css(globalStyles.listLink)} href={'/admin/courses/' + this.props.courseId + '/lectures/' + this.props.lectureId}>{lectureInfo.title}</a>
+            <a className={css(globalStyles.listLink)} href={'/admin/courses/' + this.props.courseId + '/lectures/' + this.props.lectureId}>{lectureInfo ? lectureInfo.title : ''}</a>
         );
     }
 }
+
+const LectureListItem = withTracker((props) => {
+    Meteor.subscribe('lectureBasic', props.lectureId);
+
+    return {
+        lectureInfo: Lectures.findOne({_id: props.lectureId})
+    };
+})(LectureListItemRaw);
  
 class AdminLectures extends Component {
     constructor(props) {
         super(props);
+
+        /* TODO: check if the current way is how state should be initialized.
+         * I thought the commented code was best, but it broke.
+         */
         this.state = {
             lectures: props.course ? props.course.lectures : [],
         }
+        
         this.onSortEnd = ({oldIndex, newIndex}) => {
             this.setState({
                 lectures: arrayMove(this.state.lectures, oldIndex, newIndex),
@@ -63,16 +75,16 @@ class AdminLectures extends Component {
         );
 
         const SortableList = SortableContainer(({items}) => {
-          return (
-            <ul>
-              {items.map((value, index) => (
-                <SortableItem key={`item-${index}`} index={index} value={value} />
-              ))}
-            </ul>
-          );
+            return (
+                <ul>
+                  {items.map((value, index) => (
+                    <SortableItem key={`item-${index}`} index={index} value={value} />
+                  ))}
+                </ul>
+            );
         });
 
-        return <SortableList distance={10} items={this.state.lectures} onSortEnd={this.onSortEnd} />
+        return <SortableList distance={10} items={this.state.lectures ? this.state.lectures : []} onSortEnd={this.onSortEnd} />
     }
 
     render() {
@@ -91,6 +103,8 @@ class AdminLectures extends Component {
 }
 
 export default withTracker((props) => {
+    Meteor.subscribe('course', props.courseId);
+
     return {
         course: Courses.findOne({_id: props.courseId})
     };

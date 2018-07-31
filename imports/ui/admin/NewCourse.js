@@ -7,9 +7,14 @@ class NewCourse extends Component {
     handleSubmit(event) {
         event.preventDefault();
         const title = this.refs.courseTitle.value;
+        const description = this.refs.courseDescription.value;
+        const imageUrl = this.refs.courseImageUrl.value;
+        
         if(title) {
-            Meteor.call('createCourse', title);
+            Meteor.call('createCourse', title, description, imageUrl);
             this.refs.courseTitle.value = '';
+            this.refs.courseDescription.value = '';
+            this.refs.courseImageUrl.value = '';
         }
     }
 
@@ -18,8 +23,19 @@ class NewCourse extends Component {
             <div>
               <h1>Novo Curso</h1>
               <form action="#" onSubmit={this.handleSubmit.bind(this)}>
-                  <input type="text" ref="courseTitle"/>
-                  <input type="submit"/>
+                  <div className="form-group">
+                    <input className="form-control" type="text" ref="courseTitle"/>
+                  </div>
+
+                  <div className="form-group">
+                    <textarea className="form-control" rows="3" ref="courseDescription"></textarea>
+                  </div>
+
+                  <div className="form-group">
+                    <input className="form-control" type="url" ref="courseImageUrl"/>
+                  </div>
+                  
+                  <input className="btn btn-primary" type="submit"/>
               </form>
             </div>
         );

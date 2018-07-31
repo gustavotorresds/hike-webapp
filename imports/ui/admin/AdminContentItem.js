@@ -187,10 +187,9 @@ if(Meteor.isClient) {
     class AdminContentItem extends Component {
     	render() {
             let contentDisplay = null;
+            const content = this.props.content;
 
-            if(this.props) {
-                const content = this.props.content;
-
+            if(content) {
                 if(content.type === 'text') {
                     contentDisplay = <AdminTextItem content={content}/>;
                 } else if(content.type === 'video') {
@@ -211,6 +210,8 @@ if(Meteor.isClient) {
     }
 
     export default withTracker((props) => {
+        Meteor.subscribe('content', props.contentId);
+
     	return {
             content: Contents.findOne({_id: props.contentId}),
     	};

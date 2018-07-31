@@ -99,6 +99,9 @@ class AdminCourseStudents extends Component {
 }
 
 export default withTracker(function(props) {
+	Meteor.subscribe('AdminUsers');
+	Meteor.subscribe('AdminCourse', props.courseId);
+
 	return {
 		course: Courses.findOne({_id: props.courseId})
 	};

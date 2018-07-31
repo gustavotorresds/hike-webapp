@@ -16,6 +16,9 @@ class EditLecture extends Component {
     constructor(props) {
         super(props);
 
+        /* TODO: check if the current way is how state should be initialized.
+         * I thought the commented code was best, but it broke.
+         */
         this.state = {
             lectureTitle: props.lecture ? props.lecture.title : '',
             contents: props.lecture ? props.lecture.contents : [],
@@ -75,7 +78,7 @@ class EditLecture extends Component {
             </ul>
           );
         });
-        return <SortableList distance={10} items={this.state.contents} onSortEnd={this.onSortEnd} />;
+        return <SortableList distance={10} items={this.state.contents ? this.state.contents : []} onSortEnd={this.onSortEnd} />;
     }
 
     render() {
@@ -104,6 +107,8 @@ class EditLecture extends Component {
 }
 
 export default withTracker((props) => {
+    Meteor.subscribe('lecture', props.lectureId);
+
     return {
         lecture: Lectures.findOne({_id: props.lectureId})
     };

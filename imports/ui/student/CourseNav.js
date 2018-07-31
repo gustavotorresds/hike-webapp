@@ -5,15 +5,14 @@ import { StyleSheet, css } from 'aphrodite';
 import { Lectures } from '../../api/lectures.js';
 import { Courses } from '../../api/courses.js';
  
-class LectureListItem extends Component {
+class LectureListItemRaw extends Component {
     render() {
-        const lec = Lectures.findOne({_id: this.props.lectureId});
-        const lecItem = lec ?
+        const lecItem = this.props.lecture ?
                 <a className={
                         css(style.lectureLink, this.props.isChosen && style.highlight)
                     }
-                    href={'/courses/' + this.props.courseId + '/lectures/' + lec._id}>
-                        {lec.title}
+                    href={'/courses/' + this.props.courseId + '/lectures/' + this.props.lecture._id}>
+                        {this.props.lecture.title}
                 </a> : '';
 
         return (
@@ -21,6 +20,14 @@ class LectureListItem extends Component {
         );
     }
 }
+
+const LectureListItem = withTracker((props) => {
+    Meteor.subscribe('lecture', props.lectureId);
+
+    return {
+        lecture: Lectures.findOne({_id: props.lectureId}),
+    }
+})(LectureListItemRaw);
 
 class CourseNav extends Component {
     renderLectures() {

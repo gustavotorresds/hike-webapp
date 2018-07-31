@@ -35,6 +35,8 @@ class AdminCourses extends Component {
 }
 
 export default withTracker(() => {
+    Meteor.subscribe('coursesBasic');
+
     return {
         courses: Courses.find({}).fetch(),
     };

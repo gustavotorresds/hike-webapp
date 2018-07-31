@@ -9,5 +9,3 @@ T9n.setLanguage('pt');
 Meteor.startup(() => {
 
 });
-
-Meteor.subscribe('users');
