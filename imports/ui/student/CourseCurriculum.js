@@ -44,10 +44,23 @@ class CourseCurriculum extends Component {
     }
 
     render() {
+        const courseInfo = this.props.course ?
+            (<div>
+                <img src={this.props.course.imageUrl} className="img-fluid"/>
+                <h2 className={css(style.courseTitle)}>{this.props.course.title}</h2>
+            </div>) :
+            '';
+
         return (
-            <div>
-                <h1>{this.props.course ? this.props.course.title : ''} Curriculum</h1>
-                {this.renderCurriculum()}
+            <div className="row no-gutters">
+                <div className={'col-md-2 ' + css(style.courseInfo)}>
+                    {courseInfo}
+                </div>
+
+                <div className={'col-md-10 ' + css(style.curriculum)}>
+                    <h1>{this.props.course ? this.props.course.title : ''} Curriculum</h1>
+                    {this.renderCurriculum()}
+                </div>
             </div>
         );
     }
@@ -60,3 +73,15 @@ export default withTracker((props) => {
         course: Courses.findOne({_id: props.courseId})
     };
 })(CourseCurriculum);
+
+const style = StyleSheet.create({
+    courseInfo: {
+        backgroundColor: '#F0F0F0',
+    },
+    courseTitle: {
+        padding: '10px',
+    },
+    curriculum: {
+        padding: '10px 20px',
+    }
+});

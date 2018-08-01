@@ -84,7 +84,7 @@ class CourseContainer extends Component {
 }
 
 export default withTracker((props) => {
-	Meteor.subscribe('course', props.courseId);
+	Meteor.subscribe('AdminCourse', props.courseId);
 
 	return {
 		course: Courses.findOne({_id: props.courseId})
