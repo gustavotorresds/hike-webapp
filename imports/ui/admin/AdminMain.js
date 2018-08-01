@@ -1,12 +1,23 @@
 import React, { Component } from 'react';
+import { withTracker } from 'meteor/react-meteor-data';
 
 import { StyleSheet, css } from 'aphrodite';
 import globalStyles from '../globalStyles.js';
 
-export default class AdminMain extends Component {
+import { Courses } from '../../api/courses.js';
+
+class AdminMainRaw extends Component {
 	render() {
 		return (
-			<div>AdminMain</div>
+			<div>
+				AdminMain
+			</div>
 		);
 	}
 }
+
+export default withTracker((props) => {
+	return {
+		
+	}
+})(AdminMainRaw);

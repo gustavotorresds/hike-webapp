@@ -113,10 +113,24 @@ Meteor.methods({
 
         Courses.insert({
             title: title,
-            description: description,
-            photoUrl: photoUrl,
+            description: description ? description : '',
+            photoUrl: photoUrl ? photoUrl : '',
             lectures: [],
             students: []
+        });
+    },
+    updateCourse: function(courseId, title, description, photoUrl) {
+        var loggedInUser = Meteor.user();
+        if (!loggedInUser || !Roles.userIsInRole(loggedInUser, ['admin'], 'default-group')) {
+          throw new Meteor.Error(403, "Access denied");
+        }
+
+        Courses.update(courseId, {
+            $set: {
+                title: title,
+                description: description,
+                photoUrl: photoUrl,
+            }
         });
     },
     'addStudentToCourse': function(studentId, courseId) {

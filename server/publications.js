@@ -3,12 +3,15 @@ import { Lectures } from '../imports/api/lectures.js';
 import { Contents } from '../imports/api/contents.js';
 
 Meteor.publish('AdminUsers', function() {
-	const u = Meteor.users.find({}, {
-		fields: {
-			emails: 1
-		}
-	});
-	return u;
+	if (Roles.userIsInRole(Meteor.userId(), ['admin'], 'default-group')) {
+		const u = Meteor.users.find({}, {
+			fields: {
+				emails: 1
+			}
+		});
+		return u;
+	}
+	return [];
 });
 
 Meteor.publish('coursesBasic', function() {
@@ -31,6 +34,9 @@ Meteor.publish('course', function(courseId) {
 	return course;
 });
 
+// TODO: change publication name since students also need
+// this in order to check whether they are enrolled.
+// TODO: or else, we can add course enrollment info to student fields.
 Meteor.publish('AdminCourse', function(courseId) {
 	// Should only find one course with such ID.
 	const course = Courses.find({_id: courseId});
