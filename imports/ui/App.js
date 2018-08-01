@@ -10,7 +10,6 @@ class App extends Component {
     render() {
         return (
             <div className={css(styles.appContainer)}>
-                <AppHeader/>
                 {this.props.main}
             </div>
         );
@@ -28,5 +27,6 @@ export default withTracker(props => {
 const styles = StyleSheet.create({
     appContainer: {
         listStyle: 'none',
+        color: 'black',
     }
 });
