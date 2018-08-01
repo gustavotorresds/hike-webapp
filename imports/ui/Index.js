@@ -5,6 +5,12 @@ import AppHeader from './AppHeader.js'
 
 import { withTracker } from 'meteor/react-meteor-data';
 
+import { faFacebook, faInstagram, faWhatsapp, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import { faHeart, faEnvelope } from '@fortawesome/free-solid-svg-icons';
+
 class Header extends Component {
 	render() {
 		return (<header className={css(headerStyle.masthead)} id="header">
@@ -35,15 +41,15 @@ class Header extends Component {
 
 const headerStyle = StyleSheet.create({
 	masthead: {
-		paddingTop: '8rem',
-  		paddingBottom: 'calc(6rem - 56px)',
+		paddingTop: '4rem',
+  		paddingBottom: '4rem',
   		'@media (min-width: 768px)': {
             paddingTop: '9rem',
   			minHeight: '600px',
         },
         '@media (min-width: 992px)': {
-            paddingTop: '9rem',
-  			minHeight: '730px',
+            paddingTop: '5rem',
+  			minHeight: '550px',
         },
 	},
 	headingOne: {
@@ -104,7 +110,7 @@ class Partners extends Component {
 		return (
 			<section className={css(style.section)}>
 		      <div className="container text-center">
-		        <h2 className="section-heading text-uppercase mb-5">Empresas que AMAM <span className="red"><i className="fas fa-heart"></i></span> a Hike</h2>
+		        <h2 className="section-heading text-uppercase mb-5">Empresas que  <FontAwesomeIcon icon={faHeart} color="#EF4836"/> a Hike</h2>
 		        <div className="row justify-content-center align-items-end">
 		          <div className="col-md-2 col-6">
 		            <img className={"img-fluid " + css(partnersStyle.image)} src="/img/partners/cubo.png"/>
@@ -314,7 +320,20 @@ class FAQ extends Component {
 			{
 				question: 'É tudo online?',
 				answer: 'Sim!',
-			}
+			},
+			{
+				question: 'Quanto tempo de dedicação?',
+				answer: 'Prevemos uma dedicação de 2 a 3 horas por semana para terminar o curso em um mês. Entretanto, você é livre para se dedicar quanto quiser. O curso demanda cerca de ~12h, ou seja, se você for uma pessoa super motivada, pode até terminar tudo em um só dia!',
+			},
+			{
+				question: 'Vocês oferecem suporte para dúvidas?',
+				answer: 'Sim! Nossa plataforma inclui opção para você postar dúvidas, que serão tiradas por alguém do nosso time.',
+			},
+			{
+				question: 'A Hike dá certificado?',
+				answer: 'Sim, contanto que você termine o curso em até 30 dias :)',
+			},
+
 		];
 
 		// TODO: allow expand
@@ -488,8 +507,8 @@ class Team extends Component {
               <img className={"mx-auto rounded-circle " + css(teamStyle.image)} src={member.picture} alt=""/>
               <h4 className={css(teamStyle.subtitle)}>{member.name}</h4>
               <p className={"text-muted " + css(teamStyle.description)}>{member.role}</p>
-              <a href={member.linkedin} target="_blank"><i className="fab fa-linkedin-in"></i></a>
-              <p>{member.description}</p>
+              <a href={member.linkedin} target="_blank"><FontAwesomeIcon icon={faLinkedinIn}/></a>
+              <p className={css(teamStyle.description)}>{member.description}</p>
           </div>);
 		});
 
@@ -524,7 +543,7 @@ const teamStyle = StyleSheet.create({
 		marginBottom: '0',
 		textTransform: 'none',
 	},
-	decription: {
+	description: {
 		marginTop: '0',
   		marginBottom: '0',
 	},
@@ -557,15 +576,15 @@ class Contact extends Component {
 		        </div>
 		        <div className="row">
 		          <div className="col-lg-3 ml-auto text-center">
-		            <i className="fab fa-whatsapp fa-3x mb-3 sr-contact"></i>
+		            <FontAwesomeIcon className={css(contactStyle.icon)} icon={faWhatsapp}/>
 		            <div>
-		              <a href="https://api.whatsapp.com/send?phone=5511983407220&text=Oi%2C%20Hike%21" target="_blank">+55 11 98340-7220</a>
+		              <a className={css(contactStyle.link)} href="https://api.whatsapp.com/send?phone=5511983407220&text=Oi%2C%20Hike%21" target="_blank">+55 11 98340-7220</a>
 		            </div>
 		          </div>
 		          <div className="col-lg-3 mr-auto text-center">
-		            <i className="far fa-envelope fa-3x mb-3 sr-contact"></i>
+		            <FontAwesomeIcon className={css(contactStyle.icon)} icon={faEnvelope}/>
 		            <div>
-		              <a href="mailto:time@hikeacademy.com.br" target="_blank">time@hikeacademy.com.br</a>
+		              <a className={css(contactStyle.link)} href="mailto:time@hikeacademy.com.br" target="_blank">time@hikeacademy.com.br</a>
 		            </div>
 		          </div>
 		        </div>
@@ -619,19 +638,32 @@ const contactStyle = StyleSheet.create({
 		':hover': {
 			cursor: 'pointer',
 		},
-	}
+	},
+	icon: {
+		fontSize: '32pt',
+		marginBottom: '10px',
+	},
+	link: {
+		color: '#3498db',
+		webkitTransition: 'all 0.1s',
+		mozTransition: 'all 0.1s',
+		transition: 'all 0.1s',
+		':hover': {
+			color: '#55BBFF',
+		  	textDecoration: 'none',
+		},
+	},
 });
 
 class Footer extends Component {
 	render() {
 		return (<div className={css(style.bgDark, footerStyle.footer)}>
 	        <div className="container">
-	          <div className="footer-border"></div>	
-	          <p className={css(style.noMargin)}>© 2018 Hike Academy</p>
-	          <div className="social">
-	            <a href="https://www.facebook.com/HikeAcademyBrasil" target="_blank"><i className="fab fa-facebook"></i></a>
-	            <a href="https://www.instagram.com/hikeacademy/" target="_blank"><i className="fab fa-instagram"></i></a>
-	            <a href="https://medium.com/hikeacademy" target="_blank"><i className="fab fa-medium"></i></a>
+	          <div className={css(footerStyle.divider)}></div>	
+	          <p>© 2018 Hike Academy</p>
+	          <div className={css(footerStyle.social)}>
+	            <a href="https://www.facebook.com/HikeAcademyBrasil" target="_blank"><FontAwesomeIcon className={css(footerStyle.socialIcon)} icon={faFacebook}/></a>
+	            <a href="https://www.instagram.com/hikeacademy/" target="_blank"><FontAwesomeIcon className={css(footerStyle.socialIcon)} icon={faInstagram}/></a>
 	          </div>
 	        </div>
 	    </div>
@@ -645,6 +677,19 @@ const footerStyle = StyleSheet.create({
 	    color: 'white', 
 	    textAlign: 'center', 
 	    fontSize: '12px', 
+	},
+	social: {
+		paddingBottom: '20px',
+	},
+	socialIcon: {
+		color: 'white',
+		fontSize: '20px',
+		margin: '0 5px',
+	},
+	divider: {
+		borderBottom: '1px solid white',
+		marginBottom: '10px',
+		borderWidth: 'thin',
 	}
 });
 
@@ -734,9 +779,5 @@ const style = StyleSheet.create({
 
 	bgDark: {
 	  backgroundColor: '#212529',
-	},
-
-	noMargin: {
-	  margin: 0,
 	},
 });

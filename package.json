@@ -9,6 +9,11 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0-beta.51",
+    "@fortawesome/fontawesome-svg-core": "^1.2.0-14",
+    "@fortawesome/free-brands-svg-icons": "^5.1.0-11",
+    "@fortawesome/free-regular-svg-icons": "^5.1.0-11",
+    "@fortawesome/free-solid-svg-icons": "^5.1.0-11",
+    "@fortawesome/react-fontawesome": "0.1.0-11",
     "aphrodite": "^2.2.2",
     "bootstrap": "^4.1.2",
     "draft-convert": "^2.1.2",
