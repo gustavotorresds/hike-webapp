@@ -114,7 +114,7 @@ class CourseContent extends Component {
                 </div>
                 <div className="row justify-content-center">
                     <div className="col-md-6 text-center">
-                        <a className="btn btn-primary" href="/pagamento">Quero esse curso f0d#@!</a>
+                        <a className="btn btn-primary" href={'/buy/' + this.props.courseId}>Quero esse curso f0d#@!</a>
                     </div>
                 </div>
             </div>;

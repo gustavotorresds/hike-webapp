@@ -131,6 +131,10 @@ Meteor.methods({
             } 
         });
     },
+    'buyCourse': function(studentId, courseId) {
+        // TODO: implement this with credit card vendor.
+        console.log('ATTEMPT FROM STUDENT ' + studentId + ' TO BUY COURSE ' + courseId);
+    },
     'removeStudentFromCourse': function(studentId, courseId) {
         var loggedInUser = Meteor.user();
         if (!loggedInUser || !Roles.userIsInRole(loggedInUser, ['admin'], 'default-group')) {
