@@ -437,22 +437,106 @@ const faqStyle = StyleSheet.create({
 	},
 });
 
+class Modal extends Component {
+	submitInterest(event) {
+		event.preventDefault();
+		const form = $(event.target);
+
+		const t = this;
+		$.ajax({
+	        type: "GET",
+	        url: form.attr('action'),
+	        data: form.serialize(),
+	        cache: false,
+	        dataType: "json",
+	        contentType: "application/json; charset=utf-8",
+
+	        error: function(error){},
+
+	        success: function(data){
+	            if (data.result === "success") {
+	            	console.log('SUCCESS');
+	                t.refs.mcResponse.innerHTML = 'Boa, você agora vai receber todas nossas novidades :)';
+	            } else {
+	                var message = data.msg || "Desculpe, algo deu errado. Tente novamente mais tarde.";
+
+	                if (data.msg) {
+	                  if (data.msg.indexOf("already subscribed") >= 0) {
+	                    message = "Você já se inscreveu. Obrigado! :)";
+	                  } else if (data.msg.indexOf("Please enter a value") >= 0) {
+	                    message = "Por favor, insira seu email.";
+	                  } else if (data.msg.indexOf("too many") >= 0) {
+	                    message = "Tivemos muitas inscrições vindo desse e-mail.";
+	                  }
+	                }
+
+	                t.refs.mcResponse.innerHTML = message;
+	            }
+	        }
+	    });
+	}
+
+	render() {
+		const courseIdToUrl = {
+   			'dataScience': 'https://hikeacademy.us17.list-manage.com/subscribe/post-json?u=5bfcd8d110b98b14d9ca89ce3&amp;id=328b96fc6a&c=?',
+		    'vba': 'https://hikeacademy.us17.list-manage.com/subscribe/post-json?u=5bfcd8d110b98b14d9ca89ce3&amp;id=6762c50ac9&c=?',
+		    'mobile': 'https://hikeacademy.us17.list-manage.com/subscribe/post-json?u=5bfcd8d110b98b14d9ca89ce3&amp;id=a29147bc07&c=?',
+		    'excel': 'https://hikeacademy.us17.list-manage.com/subscribe/post-json?u=5bfcd8d110b98b14d9ca89ce3&amp;id=2eee51aa50&c=?',
+		};
+
+		return(
+			<div className="modal fade" id="interestModal" tabIndex="-1" role="dialog" aria-labelledby="signupModalTitle" aria-hidden="true">
+		      <div className="modal-dialog modal-dialog-centered" role="document">
+		        <div className="modal-content">
+		          <div className="modal-header">
+		            <h5 className="modal-title" id="signupModalLongTitle">Quero ser Hiker</h5>
+		            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+		              <span aria-hidden="true">&times;</span>
+		            </button>
+		          </div>
+		          <div className="modal-body">
+		            <form onSubmit={this.submitInterest.bind(this)} action={courseIdToUrl[this.props.interest]} method="post" name="mc-embedded-subscribe-form" className="validate" target="_blank" noValidate>
+		              <div className="mc_embed_signup_scroll">
+		                <p className="text-muted">Deixe seu e-mail para que te enviemos novidades quando lançarmos esse curso. Pode ser até que você ganhe uns descontos também :)</p><div class="form-group">
+		                    <input type="email" name="EMAIL" className="email form-control" id="mce-EMAIL" placeholder="Email" required/>
+		                  </div>
+		                <div id="mce-responses" className="clear">
+		                  <div className={"response " + css(contactStyle.mcNoShow)} id="mce-error-response"></div>
+		                  <div className={"response " + css(contactStyle.mcNoShow)} id="mce-success-response"></div>
+		                </div>
+		                <div className={css(contactStyle.mcNoShow)} aria-hidden="true"><input type="text" name="b_5bfcd8d110b98b14d9ca89ce3_e9773b005f" tabIndex="-1" value=""/></div>
+		                <div className="text-center"><input type="submit" value="Enviar" name="subscribe" id="mc-embedded-subscribe" className="btn btn-secondary btn-block"/></div>
+		              </div>
+		            </form>
+		            <div className="mt-2" ref="mcResponse"></div>
+		          </div>
+		        </div>
+		      </div>
+		    </div>
+		);
+	}
+}
+
 class NextCourses extends Component {
 	render() {
 		const courses = [
 			{
+				id: 'dataScience',
 				title: 'Data Science',
 				description: 'Aprenda a extrair insights a partir de dados. Você vai construir  algoritmos como os que o Netflix usa para recomendar filmes.',
 			},
 			{
+				id: 'vba',
 				title: 'VBA',
 				description: 'Aprenda a automatizar diversos processos em suas planilhas! Com VBA, você leva o trabalho em Excel para outro nível.',
 			},
 			{
+				id: 'mobile',
 				title: 'Aplicativos Mobile',
 				description: 'Aprenda a construir aplicativos de celular, que permitem que você leve suas ideias para as mãos de várias pessoas.',
 			},
 			{
+				id: 'excel',
 				title: 'Excel',
 				description: 'Aprenda desde o básico até vários macetes para dominar essa ferramenta que permite que times sejam mais eficientes e organizados.',
 			},
@@ -465,7 +549,13 @@ class NextCourses extends Component {
                 <h5 className={"card-title " + css(coursesStyle.cardTitle)}>{course.title}</h5>
                 <code>[em breve]</code>
                 <p className="card-text mt-3">{course.description}</p>
-                <button className={"btn btn-primary form-toggle " + css(style.btn, style.btnPrimary)} data-target="interest-mobile">Tenho interesse</button>
+                <button
+                	onClick={() => this.props.changeInterest(course.id)}
+                	className={"btn btn-primary form-toggle " + css(style.btn, style.btnPrimary)}
+                	data-toggle="modal"
+                	data-target="#interestModal">
+                	Tenho interesse
+                </button>
               </div>
             </div>);
 		});
@@ -566,6 +656,44 @@ const teamStyle = StyleSheet.create({
 });
 
 class Contact extends Component {
+	submitMCInfo(event) {
+		event.preventDefault();
+
+		const form = $(event.target);
+		const t = this;
+		$.ajax({
+	        type: "GET",
+	        url: form.attr('action'),
+	        data: form.serialize(),
+	        cache: false,
+	        dataType: "json",
+	        contentType: "application/json; charset=utf-8",
+
+	        error: function(error){},
+
+	        success: function(data){
+	            if (data.result === "success") {
+	            	console.log('SUCCESS');
+	                t.refs.mcResponse.innerHTML = 'Boa, você agora vai receber todas nossas novidades :)';
+	            } else {
+	                var message = data.msg || "Desculpe, algo deu errado. Tente novamente mais tarde.";
+
+	                if (data.msg) {
+	                  if (data.msg.indexOf("already subscribed") >= 0) {
+	                    message = "Você já se inscreveu. Obrigado! :)";
+	                  } else if (data.msg.indexOf("Please enter a value") >= 0) {
+	                    message = "Por favor, insira seu email.";
+	                  } else if (data.msg.indexOf("too many") >= 0) {
+	                    message = "Tivemos muitas inscrições vindo desse e-mail.";
+	                  }
+	                }
+
+	                t.refs.mcResponse.innerHTML = message;
+	            }
+	        }
+	    });
+	}
+
 	render() {
 		return(
 			<section className={"text-white " + css(style.section, style.bgDark)} id="contact">
@@ -575,16 +703,15 @@ class Contact extends Component {
 		              <h6 className="mb-4">Quero receber as 9dades da Hike! 😍</h6>
 		              
 		              <div className="mc-embed-signup">
-		                <form action="https://hikeacademy.us17.list-manage.com/subscribe/post?u=5bfcd8d110b98b14d9ca89ce3&amp;id=4b9173e0e1" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" className="validate" noValidate>
+		                <form onSubmit={this.submitMCInfo.bind(this)} action="https://hikeacademy.us17.list-manage.com/subscribe/post-json?u=5bfcd8d110b98b14d9ca89ce3&amp;id=4b9173e0e1&c=?" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" className="validate" noValidate>
 		                  <div className={"mc-body " + css(contactStyle.form)}>
-		                    <input type="email" value="" name="EMAIL" className={"required email " + css(contactStyle.field, contactStyle.emailField)} id="mce-EMAIL" placeholder="E-mail"/>
+		                    <input type="email" name="EMAIL" className={css(contactStyle.field, contactStyle.emailField)} placeholder="E-mail"/>
 		                    
 		                    <div className={css(contactStyle.mcNoShow)} aria-hidden="true"><input type="text" name="b_5bfcd8d110b98b14d9ca89ce3_4b9173e0e1" tabIndex="-1" value=""/></div>
-		                    <input className={css(contactStyle.field, contactStyle.submitField)} type="submit" value="ENVIAR" name="subscribe" id="mc-embedded-subscribe"/>
+		                    <input className={css(contactStyle.field, contactStyle.submitField)} type="submit" value="ENVIAR" name="subscribe"/>
 		                  </div>
 		                  <div className="clear mt-3">
-		                    <div className="response d-none" id="mce-error-response"></div>
-		                    <div className="response d-none" id="mce-success-response"></div>
+		                    <div ref="mcResponse"></div>
 		                  </div>
 		                </form>
 		              </div>
@@ -710,6 +837,17 @@ const footerStyle = StyleSheet.create({
 });
 
 class Index extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			interest: '',
+		}
+	}
+
+	changeInterest(newInterest) {
+		this.setState({interest: newInterest});
+	}
+
     render() {
         return (
             <div className={css(style.indexContainer)}>
@@ -720,7 +858,8 @@ class Index extends Component {
              	<Instructor/>
              	<Testimonials/>
              	<FAQ/>
-             	<NextCourses/>
+             	<Modal interest={this.state.interest}/>
+             	<NextCourses changeInterest={this.changeInterest.bind(this)}/>
              	<Team/>
              	<Contact/>
              	<Footer/>
