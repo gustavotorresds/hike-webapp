@@ -5,6 +5,19 @@ import { withTracker } from 'meteor/react-meteor-data';
 import { StyleSheet, css } from 'aphrodite';
 
 class Buy extends Component {
+	constructor(props) {
+		super(props);
+		if(this.props.isEnrolled) {
+			FlowRouter.go('/courses/' + props.courseId);
+		}
+	}
+
+	componentDidUpdate(prevProps, prevState) {
+		if(this.props.isEnrolled) {
+			FlowRouter.go('/courses/' + this.props.courseId);
+		}
+	}
+
 	buyCourse(event) {
 		event.preventDefault();
 		Meteor.call('buyCourse', Meteor.userId(), this.props.courseId);
@@ -45,6 +58,6 @@ class Buy extends Component {
 
 export default withTracker((props) => {
 	return {
-
+		isEnrolled: Roles.userIsInRole(Meteor.userId(), ['student'], props.courseId),
 	};
 })(Buy);

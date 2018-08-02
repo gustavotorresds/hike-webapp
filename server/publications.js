@@ -59,6 +59,16 @@ Meteor.publish('lecture', function(lectureId) {
 });
 
 Meteor.publish('content', function(contentId) {
-	const content = Contents.find({_id: contentId});
-	return content;
+	const contents = Contents.find({_id: contentId});
+	const content = contents.fetch()[0];
+
+	const lecture = Lectures.findOne({_id: content.lectureId});
+
+	if(Roles.userIsInRole(Meteor.userId(), ['admin'], 'default-group')) {
+		return contents;
+	} else if(Roles.userIsInRole(Meteor.userId(), ['student'], lecture.courseId)) {
+		return contents;
+	}
+
+	return [];
 });

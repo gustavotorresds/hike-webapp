@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import {StyleSheet, css} from 'aphrodite';
 
-import AppHeader from './AppHeader.js'
-
 import { withTracker } from 'meteor/react-meteor-data';
 
 import { faFacebook, faInstagram, faWhatsapp, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
@@ -715,7 +713,6 @@ class Index extends Component {
     render() {
         return (
             <div className={css(style.indexContainer)}>
-            	<AppHeader/>
              	<Header/>
              	<AboutSection/>
              	<Partners/>

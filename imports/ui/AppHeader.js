@@ -10,7 +10,7 @@ class AppHeader extends Component {
     render() {
         return (
             <nav className={"navbar navbar-expand-lg navbar-dark bg-dark " + css(navStyle.mainNav)}>
-              <a className={"navbar-brand js-scroll-trigger " + css(navStyle.navbarBrand)} href="#page-top">
+              <a className={"navbar-brand js-scroll-trigger " + css(navStyle.navbarBrand)} href="/">
                 <img className={css(navStyle.navbarBrandImg)} width="100" src="/img/logo-white.png"/>
                 <span className={css(navStyle.hikeBrand)}>Hike</span>
               </a>
@@ -31,7 +31,7 @@ class AppHeader extends Component {
                     }
                   </li>
                   <li className={"nav-item"}>
-                    <a className={"nav-link " + css(navStyle.navItem)} href="/buy/ZqZyfEFsmmFS7vwoJ">Comece Já</a>
+                    <a className={"nav-link " + css(navStyle.navItem)} href="/buy/acyzubdzudcFcLZwz">Comece Já</a>
                   </li>
                 </ul>
               </div>

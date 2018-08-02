@@ -144,6 +144,8 @@ Meteor.methods({
                 'students': studentId
             } 
         });
+
+        Roles.addUsersToRoles(studentId, ['student'], courseId);
     },
     'buyCourse': function(studentId, courseId) {
         // TODO: implement this with credit card vendor.
