@@ -57,7 +57,7 @@ class CourseContainer extends Component {
 
 		return (
 			<div className="container-fluid">
-				<div className="row">
+				<div className={"row " + css(style.rowContainer)}>
 			        <div className={'col-md-3 ' + css(style.nav)}>
 			        	<div className="row">
 							<div className={'col-md-12 ' + css(style.header)}>
@@ -69,6 +69,7 @@ class CourseContainer extends Component {
 			        <div className="col-md-9">
 		        		<ContentNav
 		        			courseId={this.props.courseId}
+		        			currLectureId={this.props.lectureId}
 		        			prevLectureId={this.prevLecture()}
 		        			nextLectureId={this.nextLecture()}
 		        		/>
@@ -98,5 +99,8 @@ const style = StyleSheet.create({
 	},
 	header: {
 		padding: '0',
+	},
+	rowContainer: {
+		minHeight: '100vh',
 	}
 });

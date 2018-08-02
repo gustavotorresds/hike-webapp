@@ -11,6 +11,8 @@ import { StyleSheet, css } from 'aphrodite';
 import { Contents } from '../../api/contents.js';
 import { Lectures } from '../../api/lectures.js';
 
+import LectureComments from './LectureComments.js';
+
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { monokaiSublime } from 'react-syntax-highlighter/styles/hljs';
 
@@ -54,7 +56,7 @@ class ContentListItemRaw extends Component {
             if(this.state.type === 'text') {
                 content = <div dangerouslySetInnerHTML={{__html: this.state.rawHtml }}/>; 
             } else if(this.state.type === 'video') {
-                content = <div className="embed-responsive embed-responsive-16by9 mb-5">
+                content = <div className="embed-responsive embed-responsive-16by9">
                   <iframe className="embed-responsive-item" src={this.state.url} allowFullScreen></iframe>
                 </div>
             } else if(this.state.type === 'image') {
@@ -70,8 +72,8 @@ class ContentListItemRaw extends Component {
         }
 
         return (
-            <div className="row">
-                <div className="col-md-10">
+            <div className="row mb-5">
+                <div className="col-md-12">
                     <div className={css(style.contentItem)}>
                         {content}
                     </div>
@@ -102,7 +104,10 @@ class CourseContent extends Component {
 
     render() {
         const content = this.props.hasAccess ?
-            <div>{this.renderContents()}</div> :
+            <div>
+                {this.renderContents()}
+                <LectureComments lectureId={this.props.lectureId}/>
+            </div> :
             <div className={css(style.blockedContainer)}>
                 <div className="row justify-content-center">
                     <div className="col-md-4">
@@ -120,8 +125,8 @@ class CourseContent extends Component {
             </div>;
 
         return (
-            <div>
-                <h2>{this.props.lecture ? this.props.lecture.title : ''}</h2>
+            <div className="container">
+                <h3 className="mt-4 mb-5">{this.props.lecture ? this.props.lecture.title : ''}</h3>
                 {content}                
             </div>
         );

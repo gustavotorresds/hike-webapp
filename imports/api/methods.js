@@ -1,6 +1,7 @@
 import { Courses } from './courses.js';
 import { Contents } from './contents.js';
 import { Lectures } from './lectures.js';
+import { Comments } from './comments.js';
 
 Meteor.methods({
 	'addContentToLecture': function(type, core, lectureId) {
@@ -95,6 +96,7 @@ Meteor.methods({
             title: "New Lecture",
             contents: [],
             courseId: courseId,
+            comments: [],
         });
 
         Courses.update(courseId,
@@ -119,7 +121,7 @@ Meteor.methods({
             students: []
         });
     },
-    updateCourse: function(courseId, title, description, photoUrl) {
+    updateCourse: function(courseId, title, description, imageUrl) {
         var loggedInUser = Meteor.user();
         if (!loggedInUser || !Roles.userIsInRole(loggedInUser, ['admin'], 'default-group')) {
           throw new Meteor.Error(403, "Access denied");
@@ -129,7 +131,7 @@ Meteor.methods({
             $set: {
                 title: title,
                 description: description,
-                photoUrl: photoUrl,
+                imageUrl: imageUrl,
             }
         });
     },
@@ -162,5 +164,55 @@ Meteor.methods({
                 'students': studentId
             } 
         });
+    },
+    'completeLecture': function(studentId, lectureId) {
+        if(!studentId) {
+            return;
+        }
+
+        const lecture = Lectures.findOne({_id: lectureId});
+        const courseId = lecture.courseId;
+
+        // const user = Meteor.users.findOne({_id: studentId});
+        // const progress = user.progress || {};
+
+        const path = 'progress.' + courseId + '.lectures.' + lectureId;
+
+        Meteor.users.update(studentId, {
+            $set: {
+                [path]: true,
+            }
+        });
+    },
+    'createComment': function(commentText, lectureId) {
+        const authorId = Meteor.userId();
+        if(!authorId) {
+            throw new Meteor.Error(403, "Access denied");
+        }
+
+        const commentId = Comments.insert({
+            text: commentText,
+            authorId: authorId,
+            lectureId: lectureId,
+        });
+
+        Lectures.update(lectureId, {
+            $push: {
+                comments: commentId
+            }
+        });
+    },
+    'deleteComment': function(commentId) {
+        const comment = Comments.findOne({_id: commentId});
+        if(comment.authorId !== Meteor.userId()) {
+            throw new Meteor.Error(403, "Access denied");
+        }
+
+        Lectures.update(comment.lectureId, {
+            $pull: {
+                comments: commentId
+            }
+        })
+        Comments.remove({_id: commentId});
     }
 });

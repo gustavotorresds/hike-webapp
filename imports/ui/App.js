@@ -30,5 +30,6 @@ const styles = StyleSheet.create({
     appContainer: {
         listStyle: 'none',
         color: 'black',
+        height: '100%',
     }
 });

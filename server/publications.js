@@ -1,6 +1,7 @@
 import { Courses } from '../imports/api/courses.js';
 import { Lectures } from '../imports/api/lectures.js';
 import { Contents } from '../imports/api/contents.js';
+import { Comments } from '../imports/api/comments.js';
 
 Meteor.publish('AdminUsers', function() {
 	if (Roles.userIsInRole(Meteor.userId(), ['admin'], 'default-group')) {
@@ -71,4 +72,8 @@ Meteor.publish('content', function(contentId) {
 	}
 
 	return [];
+});
+
+Meteor.publish('comment', function(commentId) {
+	return Comments.find({_id: commentId});
 });

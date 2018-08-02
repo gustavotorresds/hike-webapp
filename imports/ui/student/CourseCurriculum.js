@@ -77,6 +77,7 @@ export default withTracker((props) => {
 const style = StyleSheet.create({
     courseInfo: {
         backgroundColor: '#F0F0F0',
+        minHeight: '750px',
     },
     courseTitle: {
         padding: '10px',

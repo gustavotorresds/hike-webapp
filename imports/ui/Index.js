@@ -138,28 +138,28 @@ class Features extends Component {
 		        <div className="row justify-content-center align-items-start text-center">
 		          <div className="col-md-3 col-sm-12">
 		            <div>
-		              <img className={"img-fluid " + css(featuresStyle.icon)} src="img/icons/iniciantes.png"/>
+		              <img className={"img-fluid " + css(featuresStyle.icon)} src="/img/icons/iniciantes.png"/>
 		            </div>
 		            <h5>PARA INICIANTES</h5>
 		            <p>A Hike foi feita para quem está começando do zero: não se preocupe se você não sabe o que é uma linha de comando ou um <span className="italic">framework</span>!</p>
 		          </div>
 		          <div className="col-md-3 col-sm-12">
 		            <div>
-		              <img className={"img-fluid " + css(featuresStyle.icon)} src="img/icons/forum.png"/>
+		              <img className={"img-fluid " + css(featuresStyle.icon)} src="/img/icons/forum.png"/>
 		            </div>
 		            <h5>FÓRUM DE DÚVIDAS</h5>
 		            <p>Alguém da equipe responderá pessoalmente a qualquer dúvida que você tiver, então não se preocupe sobre travar ou não saber o que fazer</p>
 		          </div>
 		          <div className="col-md-3 col-sm-12">
 		            <div>
-		              <img className={"img-fluid " + css(featuresStyle.icon)} src="img/icons/ummes.png"/>
+		              <img className={"img-fluid " + css(featuresStyle.icon)} src="/img/icons/ummes.png"/>
 		            </div>
 		            <h5>APRENDA EM 30 DIAS</h5>
 		            <p>Montamos um curso com o suficiente para que você saia construindo seus próprios projetos em 30 dias. Tudo só com o que realmente importa.</p>
 		          </div>
 		          <div className="col-md-3 col-sm-12">
 		            <div>
-		              <img className={"img-fluid " + css(featuresStyle.icon)} src="img/icons/certificado.png"/>
+		              <img className={"img-fluid " + css(featuresStyle.icon)} src="/img/icons/certificado.png"/>
 		            </div>
 		            <h5>CERTIFICAÇÃO</h5>
 		            <p>Termine o curso em 30 dias e ganhe o Certificado Hiker, que comprova sua habilidade para construir WebApps usando HTML, CSS e JavaScript.</p>
@@ -437,7 +437,7 @@ const faqStyle = StyleSheet.create({
 	},
 });
 
-class Modal extends Component {
+class InterestModal extends Component {
 	submitInterest(event) {
 		event.preventDefault();
 		const form = $(event.target);
@@ -497,9 +497,10 @@ class Modal extends Component {
 		          <div className="modal-body">
 		            <form onSubmit={this.submitInterest.bind(this)} action={courseIdToUrl[this.props.interest]} method="post" name="mc-embedded-subscribe-form" className="validate" target="_blank" noValidate>
 		              <div className="mc_embed_signup_scroll">
-		                <p className="text-muted">Deixe seu e-mail para que te enviemos novidades quando lançarmos esse curso. Pode ser até que você ganhe uns descontos também :)</p><div class="form-group">
+		                <p className="text-muted">Deixe seu e-mail para que te enviemos novidades quando lançarmos esse curso. Pode ser até que você ganhe uns descontos também :)</p>
+						<div className="form-group">
 		                    <input type="email" name="EMAIL" className="email form-control" id="mce-EMAIL" placeholder="Email" required/>
-		                  </div>
+		                </div>
 		                <div id="mce-responses" className="clear">
 		                  <div className={"response " + css(contactStyle.mcNoShow)} id="mce-error-response"></div>
 		                  <div className={"response " + css(contactStyle.mcNoShow)} id="mce-success-response"></div>
@@ -858,7 +859,7 @@ class Index extends Component {
              	<Instructor/>
              	<Testimonials/>
              	<FAQ/>
-             	<Modal interest={this.state.interest}/>
+             	<InterestModal interest={this.state.interest}/>
              	<NextCourses changeInterest={this.changeInterest.bind(this)}/>
              	<Team/>
              	<Contact/>

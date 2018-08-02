@@ -9,7 +9,7 @@ import { faChevronCircleLeft } from '@fortawesome/free-solid-svg-icons';
 class CourseHeader extends Component {
 	render() {
 		return (<div className={css(style.headerContainer)}>
-			<a className={css(style.link)} href={'/courses/' + this.props.courseId}><FontAwesomeIcon icon={faChevronCircleLeft} size="2x"/></a>
+			<a className={css(style.link)} href={'/courses/' + this.props.courseId}><FontAwesomeIcon icon={faChevronCircleLeft}/></a>
 		</div>);
 	}
 }

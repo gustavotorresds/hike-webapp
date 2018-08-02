@@ -3,6 +3,10 @@ import { withTracker } from 'meteor/react-meteor-data';
 import { StyleSheet, css } from 'aphrodite';
 
 class ContentNav extends Component {
+	completeLecture() {
+		Meteor.call('completeLecture', Meteor.userId(), this.props.currLectureId);
+	}
+
 	render() {
 		return <div className={'row text-center ' + css(style.nav)}>
 			{this.props.prevLectureId === -1 ? 
@@ -17,6 +21,7 @@ class ContentNav extends Component {
 			{this.props.nextLectureId === -1 ? 
 				null :
 				<a
+					onClick={this.completeLecture.bind(this)}
 					href={'/courses/' + this.props.courseId + '/lectures/' + this.props.nextLectureId}
 					className={'col ' + css(style.nextButton, style.navButton)}
 				>
