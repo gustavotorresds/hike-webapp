@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { withTracker } from 'meteor/react-meteor-data';
 
+import { Courses } from '../api/courses.js';
+
 import { NavButton } from './AccountsWrapper.js';
 
 import { StyleSheet, css } from 'aphrodite';
@@ -31,7 +33,7 @@ class AppHeader extends Component {
                     }
                   </li>
                   <li className={"nav-item"}>
-                    <a className={"nav-link " + css(navStyle.navItem)} href="/courses">Comece Já</a>
+                    <a className={"nav-link " + css(navStyle.navItem)} href={"/courses/" + (this.props.course ? this.props.course._id : '')}>Comece Já</a>
                   </li>
                 </ul>
               </div>
@@ -41,10 +43,12 @@ class AppHeader extends Component {
 }
 
 export default withTracker(props => {
-  // props here will have `main`, passed from the router
-  // anything we return from this function will be *added* to it
+  // TODO: change this whenever we create new courses.
+  Meteor.subscribe('coursesBasic');
+
   return {
-    userId: Meteor.userId()
+    userId: Meteor.userId(),
+    course: Courses.findOne({}),
   };
 })(AppHeader);
 

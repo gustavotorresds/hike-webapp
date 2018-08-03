@@ -42,11 +42,11 @@ class Buy extends Component {
 					  	<li>Conteúdo trazido direto das melhores universidades do mundo</li>
 					  </ul>
 					  
-					  <form id="MPForm" action={"/pay/" + Meteor.userId()} method="POST"></form>
+					  <form id="MPForm" action={"/pay/" + this.props.courseId + '/' + Meteor.userId()} method="POST"></form>
 					</div>
 				</div>
 				<div className="col-md-6 text-center">
-					<div className={"jumbotron mt-5 " + css(style.tryContainer)}>
+					<div className={"jumbotron mt-5"}>
 					  <a className="btn btn-secondary" href="/courses">Experimente</a>
 					</div>
 				</div>
@@ -69,7 +69,4 @@ const style = StyleSheet.create({
 	benefits: {
 		listStyle: 'disc',
 	},
-	tryContainer: {
-		// height: '100%',
-	}
 });

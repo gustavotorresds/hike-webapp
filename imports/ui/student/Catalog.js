@@ -20,6 +20,19 @@ class CourseItem extends Component {
 }
 
 class Catalog extends Component {
+    constructor(props) {
+        super(props);
+        if(props.courses && props.courses.length === 1) {
+            FlowRouter.go('/courses/' + props.courses[0]._id);
+        }
+    }
+
+    componentDidUpdate() {
+        if(this.props.courses && this.props.courses.length === 1) {
+            FlowRouter.go('/courses/' + this.props.courses[0]._id);
+        }
+    }
+
     renderCourses() {
         const courses = this.props.courses ? this.props.courses.map((course) => {
             return <CourseItem key={course._id} course={course}/>

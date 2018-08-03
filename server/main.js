@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import '../imports/api/methods.js';
+import { Courses } from '../imports/api/courses.js';
 
 Meteor.startup(() => {
   // code to run on server at startup
@@ -13,11 +13,16 @@ var mercadopago = require('mercadopago');
 Picker.middleware( bodyParser.json() );
 Picker.middleware( bodyParser.urlencoded( { extended: false } ) );
 
-Picker.route('/pay/:userId', function(params, req, res, next) {
+Picker.route('/pay/:courseId/:userId', function(params, req, res, next) {
+	const courseId = params.courseId;
 	const userId = params.userId;
+
+	console.log('COURSE: ', courseId);
+	console.log('USER: ', userId);
 
  	const token = req.body.token;
 	const payment_method_id = req.body.payment_method_id;
+	const installments = req.body.installments;
 	const issuer_id = req.body.issuer_id;
 
 	mercadopago.configurations.setAccessToken(Meteor.settings.private.MPPrivate);
@@ -29,6 +34,7 @@ Picker.route('/pay/:userId', function(params, req, res, next) {
 	  transaction_amount: 5,
 	  token: token,
 	  description: 'Hike - Desenvolvimento Web',
+	  installments: parseInt(installments),
 	  payment_method_id: payment_method_id,
 	  issuer_id: issuer_id,
 	  payer: {
@@ -37,11 +43,18 @@ Picker.route('/pay/:userId', function(params, req, res, next) {
 	};
 
 	// Armazena e envia o pagamento
-	mercadopago.payment.save(payment_data).then(function (data) {
+	mercadopago.payment.save(payment_data).then(Meteor.bindEnvironment(function (data) {
 	  const status = data.body.status;
 	  const payerEmail = data.body.payer.email;
 
 	  if(status === 'approved') {
+	  	Courses.update(courseId, {
+            $addToSet: {
+                'students': userId
+            } 
+        });
+        Roles.addUsersToRoles(userId, ['student'], courseId);
+
 	  	res.writeHead(301, {Location: "/welcome"});
 	  } else if (status === 'pending') {
 	  	res.writeHead(301, {Location: "/pending"});
@@ -50,11 +63,11 @@ Picker.route('/pay/:userId', function(params, req, res, next) {
 	  } else if (status === 'rejected') {
 	  	res.writeHead(301, {Location: "/rejected"});
 	  } else {
-
+	  	res.writeHead(301, {Location: "/"});
 	  }
 
 	  res.end();
-	}).catch(function (error) {
+	})).catch(function (error) {
 	  console.log('ERROR: ', error);
 	});
 });
