@@ -124,7 +124,7 @@ Meteor.methods({
             students: []
         });
     },
-    updateCourse: function(courseId, title, description, imageUrl) {
+    'updateCourse': function(courseId, title, description, imageUrl) {
         var loggedInUser = Meteor.user();
         if (!loggedInUser || !Roles.userIsInRole(loggedInUser, ['admin'], 'default-group')) {
           throw new Meteor.Error(403, "Access denied");
