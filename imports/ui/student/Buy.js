@@ -14,13 +14,14 @@ class Buy extends Component {
 		if(this.props.isEnrolled) {
 			FlowRouter.go('/courses/' + props.courseId);
 		}
+		console.log('KEY: ', Meteor.settings.public.MPPublic);
 	}
 
 	componentDidMount() {
 		const script = document.createElement("script");
 		script.src="https://www.mercadopago.com.br/integrations/v1/web-tokenize-checkout.js";
 		script.dataset.publicKey=Meteor.settings.public.MPPublic;
-		script.dataset.transactionAmount="10";
+		script.dataset.transactionAmount="5";
 		script.dataset.buttonLabel="Comprar";
 		let form = document.getElementById('MPForm');
 		form.appendChild(script);
@@ -41,7 +42,7 @@ class Buy extends Component {
 					  	<li>Conteúdo trazido direto das melhores universidades do mundo</li>
 					  </ul>
 					  
-					  <form id="MPForm" action="/processar-pagamento" method="POST"></form>
+					  <form id="MPForm" action={"/pay/" + Meteor.userId()} method="POST"></form>
 					</div>
 				</div>
 				<div className="col-md-6 text-center">
