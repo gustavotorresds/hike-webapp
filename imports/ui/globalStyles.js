@@ -13,7 +13,7 @@ const globalStyles = StyleSheet.create({
 		color: 'black',
 		backgroundColor: '#E7E7E7',
 		display: 'block',
-		padding: '10px',
+		padding: '12px',
 		':hover': {
 			textDecoration: 'none',
 			backgroundColor: '#DEDEDE',

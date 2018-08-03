@@ -16,7 +16,14 @@ class LectureRaw extends Component {
                     href={'/courses/' + this.props.courseId + '/lectures/' + (this.props.lecture ? this.props.lecture._id : '')}
                     className={css(globalStyles.listLink)}
                     >
-                    {this.props.lecture ? this.props.lecture.title : ''}
+                        <div className="row justify-content-between">
+                            <div className="col">
+                                {this.props.lecture ? this.props.lecture.title : ''}
+                            </div>
+                            <div className={"col-2 " + css(style.rightAlign)}>
+                                <button className="btn btn-info btn-sm">Começar</button>
+                            </div>
+                        </div>
                     </a>
                 </li>
             </div>
@@ -84,5 +91,8 @@ const style = StyleSheet.create({
     },
     curriculum: {
         padding: '10px 20px',
+    },
+    rightAlign: {
+        textAlign: 'right',
     }
 });

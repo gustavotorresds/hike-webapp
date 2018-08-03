@@ -45,7 +45,7 @@ const Comment = withTracker((props) => {
 
 class LectureComments extends Component {
 	renderComments() {
-		const comments = this.props.lecture.comments;
+		const comments = this.props.lecture.comments || [];
 		return comments.map((commentId, index) => {
 			return <Comment key={index} commentId={commentId}/>
 		});
