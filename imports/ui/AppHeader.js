@@ -31,7 +31,7 @@ class AppHeader extends Component {
                     }
                   </li>
                   <li className={"nav-item"}>
-                    <a className={"nav-link " + css(navStyle.navItem)} href="/buy/acyzubdzudcFcLZwz">Comece Já</a>
+                    <a className={"nav-link " + css(navStyle.navItem)} href="/courses">Comece Já</a>
                   </li>
                 </ul>
               </div>
