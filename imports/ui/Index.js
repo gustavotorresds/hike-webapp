@@ -314,9 +314,7 @@ class FAQItem extends Component {
               <button onClick={this.toggle.bind(this)} className={css(faqStyle.accordion)}>{this.props.question}
                 <svg className={"chevron ml3 fill-silver " + css(faqStyle.expandIcon, (this.state.expanded ? faqStyle.minimizeIcon : ''))} width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"><g strokeWidth="0" fill="#000000" fillRule="evenodd"><path d="M29.2617603,20.9995621 C29.1409175,20.9995621 29.018601,20.9662302 28.9051266,20.8962332 L16,12.7865884 L3.09487336,20.8962332 C2.73971342,21.1178902 2.29023716,20.9728966 2.09276235,20.5712475 C1.89528753,20.1695984 2.02349879,19.6612873 2.37865872,19.4379638 L15.6418927,11.1049954 C15.8644203,10.9650015 16.1355797,10.9650015 16.3581073,11.1049954 L29.6213413,19.4379638 C29.9765012,19.6612873 30.1047125,20.1679318 29.9072377,20.5712475 C29.7731316,20.8445688 29.5211302,20.9995621 29.2617603,20.9995621"></path></g></svg>
               </button>
-              <div className={css(faqStyle.panel) + (this.state.expanded ? '' : ' d-none ')}>
-                <p>{this.props.answer}</p>
-              </div>
+              <div className={css(faqStyle.panel) + (this.state.expanded ? '' : ' d-none ')} dangerouslySetInnerHTML={ {__html: this.props.answer} }/>
             </div>
 		);
 	}
@@ -427,6 +425,7 @@ const faqStyle = StyleSheet.create({
 	panel: {
 		color: '#333',
 		padding: '0 18px',
+		marginBottom: '15px',
 		overflow: 'hidden',
 	},
 	minimizeIcon: {
