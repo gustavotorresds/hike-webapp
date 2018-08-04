@@ -137,7 +137,8 @@ export default withTracker((props) => {
     const lecture = Meteor.subscribe('lecture', props.lectureId);
 
     return {
-        loading: lecture.ready(),
+        lecture,
+        loading: !lecture.ready(),
         lecture: Lectures.findOne({_id: props.lectureId})
     };
 })(CourseContent);
