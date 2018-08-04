@@ -127,16 +127,17 @@ class CourseContent extends Component {
         return (
             <div className="container">
                 <h3 className="mt-4 mb-5">{this.props.lecture ? this.props.lecture.title : ''}</h3>
-                {content}                
+                {this.props.loading ? 'LOADING' : content}
             </div>
         );
     }
 }
 
 export default withTracker((props) => {
-    Meteor.subscribe('lecture', props.lectureId);
+    const lecture = Meteor.subscribe('lecture', props.lectureId);
 
     return {
+        loading: lecture.ready(),
         lecture: Lectures.findOne({_id: props.lectureId})
     };
 })(CourseContent);
