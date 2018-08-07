@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 import { StyleSheet, css } from 'aphrodite';
 
+import Grid from '@material-ui/core/Grid';
+
 import CourseHeader from './CourseHeader.js';
 import CourseNav from './CourseNav.js';
 import ContentNav from './ContentNav.js';
@@ -56,30 +58,23 @@ class CourseContainer extends Component {
 			'';
 
 		return (
-			<div className="container-fluid">
-				<div className={"row " + css(style.rowContainer)}>
-			        <div className={'col-md-3 ' + css(style.nav)}>
-			        	<div className="row">
-							<div className={'col-md-12 ' + css(style.header)}>
-								<CourseHeader courseId={this.props.courseId}/>
-							</div>
-						</div>
-			            {nav}
-			        </div>
-			        <div className="col-md-9">
-		        		<ContentNav
-		        			courseId={this.props.courseId}
-		        			currLectureId={this.props.lectureId}
-		        			prevLectureId={this.prevLecture()}
-		        			nextLectureId={this.nextLecture()}
-		        		/>
-			        	<CourseContent
-				          courseId={this.props.courseId}
-				          lectureId={this.props.lectureId}
-				          hasAccess={this.hasAccess()}/>
-			        </div>
-			    </div>
-		    </div>
+			<Grid container spacing={0}>
+		        <Grid item xs={2}>
+		          {nav}
+		        </Grid>
+		        <Grid item xs={10} className={css(style.contentContainer)}>
+		          <ContentNav
+	        			courseId={this.props.courseId}
+	        			currLectureId={this.props.lectureId}
+	        			prevLectureId={this.prevLecture()}
+	        			nextLectureId={this.nextLecture()}
+	        	   />
+	        	   	<CourseContent
+			          courseId={this.props.courseId}
+			          lectureId={this.props.lectureId}
+			          hasAccess={this.hasAccess()}/>
+		        </Grid>
+		    </Grid>
 		);
 	}
 }
@@ -102,5 +97,8 @@ const style = StyleSheet.create({
 	},
 	rowContainer: {
 		minHeight: '100vh',
-	}
+	},
+	contentContainer: {
+		backgroundColor: '#F3F3F3',
+	},
 });

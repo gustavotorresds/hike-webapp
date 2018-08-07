@@ -11,6 +11,9 @@ import { StyleSheet, css } from 'aphrodite';
 import { Contents } from '../../api/contents.js';
 import { Lectures } from '../../api/lectures.js';
 
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+
 import LectureComments from './LectureComments.js';
 
 import SyntaxHighlighter from 'react-syntax-highlighter';
@@ -105,7 +108,9 @@ class CourseContent extends Component {
     render() {
         const content = this.props.hasAccess ?
             <div>
-                {this.renderContents()}
+                <Paper className={css(style.contentContainer)}>
+                    {this.renderContents()}
+                </Paper>
                 <LectureComments lectureId={this.props.lectureId}/>
             </div> :
             <div className={css(style.blockedContainer)}>
@@ -125,10 +130,11 @@ class CourseContent extends Component {
             </div>;
 
         return (
-            <div className="container">
-                <h3 className="mt-4 mb-5">{this.props.lecture ? this.props.lecture.title : ''}</h3>
-                {this.props.loading ? 'LOADING' : content}
-            </div>
+            <Grid container justify="center" spacing={24}>
+                <Grid item xs={8}>
+                    {this.props.loading ? 'LOADING' : content}
+                </Grid>
+            </Grid>
         );
     }
 }
@@ -157,5 +163,9 @@ const style = StyleSheet.create({
     blockedContainer: {
         backgroundColor: '#E5E5E5',
         padding: '50px',
-    }
+    },
+    contentContainer: {
+        padding: '50px',
+        marginTop: '50px',
+    },
 });

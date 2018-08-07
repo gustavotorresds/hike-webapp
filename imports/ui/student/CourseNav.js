@@ -82,7 +82,7 @@ const style = StyleSheet.create({
             cursor: 'pointer',
         },
     },
-    highlight:{
+    highlight: {
         fontWeight: 'bold',
         backgroundColor: 'rgba(112, 190, 255, 0.5)',
         ':hover': {

@@ -7,6 +7,8 @@ import globalStyles from '../globalStyles.js';
 import { Courses } from '../../api/courses.js';
 import { Lectures } from '../../api/lectures.js';
 
+import Button from '@material-ui/core/Button';
+
 class LectureRaw extends Component {
     render() {
         return (
