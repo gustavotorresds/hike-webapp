@@ -59,7 +59,7 @@ class CourseContainer extends Component {
 
 		return (
 			<Grid container spacing={0}>
-		        <Grid item xs={2}>
+		        <Grid item xs={2} className={css(style.nav)}>
 		          {nav}
 		        </Grid>
 		        <Grid item xs={10} className={css(style.contentContainer)}>
@@ -89,7 +89,7 @@ export default withTracker((props) => {
 
 const style = StyleSheet.create({
 	nav: {
-		backgroundColor: '#F6F6F6',
+		backgroundColor: 'white',
         borderRight: '1px solid #E7E7E7',
 	},
 	header: {

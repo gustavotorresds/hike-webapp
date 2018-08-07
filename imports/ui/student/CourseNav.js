@@ -2,22 +2,29 @@ import React, { Component } from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 import { StyleSheet, css } from 'aphrodite';
 
+import Stepper from '@material-ui/core/Stepper';
+import Step from '@material-ui/core/Step';
+import StepLabel from '@material-ui/core/StepLabel';
+import StepContent from '@material-ui/core/StepContent';
+import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+
 import { Lectures } from '../../api/lectures.js';
 import { Courses } from '../../api/courses.js';
  
 class LectureListItemRaw extends Component {
     render() {
         const lecItem = this.props.lecture ?
-                <a className={
-                        css(style.lectureLink, this.props.isChosen && style.highlight)
-                    }
+                <a
+                    className={css(style.lectureLink)}
                     href={'/courses/' + this.props.courseId + '/lectures/' + this.props.lecture._id}>
                         {this.props.lecture.title}
                 </a> : '';
 
-        return (
-            <li>{lecItem}</li>
-        );
+        return (<span>
+            {lecItem}
+        </span>);
     }
 }
 
@@ -30,24 +37,59 @@ const LectureListItem = withTracker((props) => {
 })(LectureListItemRaw);
 
 class CourseNav extends Component {
-    renderLectures() {
-        if(this.props.course) {
-            const lecturesList = this.props.course.lectures.map((lectureId) => {
-                return <LectureListItem
-                    key={lectureId}
-                    courseId={this.props.course._id}
-                    lectureId={lectureId}
-                    isChosen={(this.props.lectureId === lectureId)}
-                />
-            });
-
-            return <ul className={css(style.lectureList)}>{lecturesList}</ul>;
+    constructor(props) {
+        super(props);
+        this.state = {
+            activeStep: this.currStep(),
         }
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if(prevProps !== this.props) {
+            this.setState({
+                activeStep: this.currStep(),
+            });
+        }
+    }
+
+    currStep() {
+        if(this.props.course) {
+            const lectures = this.props.course.lectures;
+            return lectures.indexOf(this.props.lectureId);    
+        }
+        return 0;
+    }
+
+    renderLectures() {
+        if(!this.props.course) {
+            return '';
+        }
+
+        const steps = this.props.course.lectures;
+
+        if(this.props.course) {
+            return <Stepper activeStep={this.state.activeStep} orientation="vertical">
+              {steps.map((lectureId, index) => {
+                return (
+                  <Step color="blue" key={lectureId}>
+                    <StepLabel>
+                        <LectureListItem
+                            courseId={this.props.course._id}
+                            lectureId={lectureId}
+                        />
+                    </StepLabel>
+                  </Step>
+                );
+              })}
+            </Stepper>;
+        }
+
+        return '';
     }
 
     render() {
         return (
-            <div className={css(style.nav)}>
+            <div>
                 <h2 className={css(style.navTitle)}>{this.props.course ? this.props.course.title : ''}</h2>
                 {this.renderLectures()}
             </div>
@@ -74,12 +116,8 @@ const style = StyleSheet.create({
         color: '#5B5B5B',
         padding: '10px 0 10px 10px',
         margin: '0',
-        borderBottom: '1px solid #E7E7E7',
         ':hover': {
             textDecoration: 'none',
-            color: '#8C8C8C',
-            backgroundColor: 'rgba(67, 170, 255, 0.2)',
-            cursor: 'pointer',
         },
     },
     highlight: {
