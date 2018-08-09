@@ -15,6 +15,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 
 import LectureComments from './LectureComments.js';
+import Loading from '../Loading.js';
 
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { monokaiSublime } from 'react-syntax-highlighter/styles/hljs';
@@ -130,9 +131,9 @@ class CourseContent extends Component {
             </div>;
 
         return (
-            <Grid container justify="center" spacing={23}>
+            <Grid container justify="center">
                 <Grid item xs={8}>
-                    {this.props.loading ? 'LOADING' : content}
+                    {this.props.loading ? <Loading/> : content}
                 </Grid>
             </Grid>
         );

@@ -77,3 +77,7 @@ Meteor.publish('content', function(contentId) {
 Meteor.publish('comment', function(commentId) {
 	return Comments.find({_id: commentId});
 });
+
+Meteor.publish('selfUser', function() {
+	return Meteor.users.find({_id: Meteor.userId()})
+});

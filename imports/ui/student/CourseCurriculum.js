@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 
 import globalStyles from '../globalStyles.js';
 import CourseNav from './CourseNav.js';
+import Loading from '../Loading.js';
 
 import { Courses } from '../../api/courses.js';
 import { Lectures } from '../../api/lectures.js';
@@ -68,30 +69,33 @@ class CourseCurriculum extends Component {
             </Paper>) :
             '';
 
-        return (<div className={css(style.container)}>
-            <div className="row no-gutters">
-                <div className={'col'}>
-                    {courseInfo}
+        return (this.props.loading ? <Loading/> :
+            <div className={css(style.container)}>
+                <div className="row no-gutters">
+                    <div className={'col'}>
+                        {courseInfo}
+                    </div>
                 </div>
-            </div>
 
-            <div className="row justify-content-center no-gutters">
-                <div className={'col-md-6 mt-4 ' + css(style.curriculum)}>
-                    <div className="row justify-content-center">
-                        <div className={'col-md-4'}>
-                            <CourseNav courseId={this.props.courseId} />
+                <div className="row justify-content-center no-gutters">
+                    <div className={'col-md-6 mt-4 ' + css(style.curriculum)}>
+                        <div className="row justify-content-center">
+                            <div className={'col-md-4'}>
+                                <CourseNav courseId={this.props.courseId} />
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
         </div>);
     }
 }
 
 export default withTracker((props) => {
-    Meteor.subscribe('course', props.courseId);
+    const course = Meteor.subscribe('course', props.courseId);
 
     return {
+        course,
+        loading: !course.ready(),
         course: Courses.findOne({_id: props.courseId})
     };
 })(CourseCurriculum);

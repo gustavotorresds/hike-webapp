@@ -7,11 +7,17 @@ import globalStyles from '../globalStyles.js';
 import AdminHeader from './AdminHeader.js';
 import AdminNav from './AdminNav.js';
 import AdminMain from './AdminMain.js';
+import Loading from '../Loading.js';
 
 import { NavButton } from '../AccountsWrapper.js';
 
 class AdminView extends Component {
 	render() {
+		if(this.props.loading) {
+			return <Loading/>
+		}
+
+
 		if(!this.props.isAdmin) {
 			return (<div className="container">
 				<div className="row justify-content-center text-center">
@@ -46,7 +52,11 @@ class AdminView extends Component {
 }
 
 export default withTracker((props) => {
+	const user = Meteor.subscribe('selfUser');
+
 	return {
+		user,
+		loading: !user.ready(),
 		userId: Meteor.userId(),
 		isAdmin: Roles.userIsInRole(Meteor.userId(), ['admin'], 'default-group'),
 	};
