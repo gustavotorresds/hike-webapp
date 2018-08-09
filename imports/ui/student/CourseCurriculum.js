@@ -2,7 +2,11 @@ import React, { Component } from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 import { StyleSheet , css } from 'aphrodite';
 
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+
 import globalStyles from '../globalStyles.js';
+import CourseNav from './CourseNav.js';
 
 import { Courses } from '../../api/courses.js';
 import { Lectures } from '../../api/lectures.js';
@@ -54,24 +58,33 @@ class CourseCurriculum extends Component {
 
     render() {
         const courseInfo = this.props.course ?
-            (<div>
-                <img src={this.props.course.imageUrl} className="img-fluid"/>
-                <h2 className={css(style.courseTitle)}>{this.props.course.title}</h2>
-            </div>) :
+            (<Paper className={css(style.courseInfo)} elevation={1}>
+                <Typography className={css(style.courseTitle)} variant="headline" component="h1">
+                  {this.props.course.title}
+                </Typography>
+                <Typography className={css(style.courseDescription)} component="p">
+                  {this.props.course.description}
+                </Typography>
+            </Paper>) :
             '';
 
-        return (
+        return (<div className={css(style.container)}>
             <div className="row no-gutters">
-                <div className={'col-md-2 ' + css(style.courseInfo)}>
+                <div className={'col'}>
                     {courseInfo}
                 </div>
+            </div>
 
-                <div className={'col-md-10 ' + css(style.curriculum)}>
-                    <h1>{this.props.course ? this.props.course.title : ''} Curriculum</h1>
-                    {this.renderCurriculum()}
+            <div className="row justify-content-center no-gutters">
+                <div className={'col-md-6 mt-4 ' + css(style.curriculum)}>
+                    <div className="row justify-content-center">
+                        <div className={'col-md-4'}>
+                            <CourseNav courseId={this.props.courseId} />
+                        </div>
+                    </div>
                 </div>
             </div>
-        );
+        </div>);
     }
 }
 
@@ -84,15 +97,22 @@ export default withTracker((props) => {
 })(CourseCurriculum);
 
 const style = StyleSheet.create({
+    container: {
+       backgroundColor: '#F3F3F3', 
+    },
     courseInfo: {
-        backgroundColor: '#F0F0F0',
-        minHeight: '750px',
+        padding: '40px 20%',
     },
     courseTitle: {
-        padding: '10px',
+        marginBottom: '15px',
+        fontSize: '30pt',
+    },
+    courseDescription: {
+        lineHeight: '200%',
+        fontSize: '12pt',
     },
     curriculum: {
-        padding: '10px 20px',
+        backgroundColor: 'white',
     },
     rightAlign: {
         textAlign: 'right',

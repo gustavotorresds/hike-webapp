@@ -60,6 +60,7 @@ class CourseContainer extends Component {
 		return (
 			<Grid container spacing={0}>
 		        <Grid item xs={2} className={css(style.nav)}>
+		        	<h2 className={css(style.navTitle)}>{this.props.course ? this.props.course.title : ''}</h2>
 		          {nav}
 		        </Grid>
 		        <Grid item xs={10} className={css(style.contentContainer)}>
@@ -91,7 +92,13 @@ const style = StyleSheet.create({
 	nav: {
 		backgroundColor: 'white',
         borderRight: '1px solid #E7E7E7',
+        minHeight: '100vh',
 	},
+	navTitle: {
+        padding: '10% 0 0 10%',
+        fontSize: '18pt',
+        fontWeight: 'normal',
+    },
 	header: {
 		padding: '0',
 	},

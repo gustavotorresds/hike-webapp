@@ -130,7 +130,7 @@ class CourseContent extends Component {
             </div>;
 
         return (
-            <Grid container justify="center" spacing={24}>
+            <Grid container justify="center" spacing={23}>
                 <Grid item xs={8}>
                     {this.props.loading ? 'LOADING' : content}
                 </Grid>

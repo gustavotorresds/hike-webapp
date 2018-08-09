@@ -71,7 +71,7 @@ const style = StyleSheet.create({
 		// },
 	},
 	prevButton: {
-		right: '75%',
+		right: '72%',
 	},
 	nextButton: {
 		right: '40px',

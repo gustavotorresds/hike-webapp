@@ -71,7 +71,7 @@ class CourseNav extends Component {
             return <Stepper activeStep={this.state.activeStep} orientation="vertical">
               {steps.map((lectureId, index) => {
                 return (
-                  <Step color="blue" key={lectureId}>
+                  <Step key={lectureId}>
                     <StepLabel>
                         <LectureListItem
                             courseId={this.props.course._id}
@@ -90,7 +90,6 @@ class CourseNav extends Component {
     render() {
         return (
             <div>
-                <h2 className={css(style.navTitle)}>{this.props.course ? this.props.course.title : ''}</h2>
                 {this.renderLectures()}
             </div>
         );
@@ -104,9 +103,6 @@ export default withTracker((props) => {
 })(CourseNav);
 
 const style = StyleSheet.create({
-    navTitle: {
-        padding: '10px',
-    },
     lectureList: {
         listStyle: 'none',
         padding: '0'
@@ -115,6 +111,7 @@ const style = StyleSheet.create({
         display: 'block',
         color: '#5B5B5B',
         padding: '10px 0 10px 10px',
+        fontSize: '12pt',
         margin: '0',
         ':hover': {
             textDecoration: 'none',
