@@ -93,17 +93,12 @@ class PrivacyPolicy extends Component {
 				        <p>Google Analytics is a web analytics service offered by Google that tracks and reports website traffic. Google uses the data collected to track and monitor the use of our Service. This data is shared with other Google services. Google may use the collected data to contextualize and personalize the ads of its own advertising network.</p>
 				        <p>You can opt-out of having made your activity on the Service available to Google Analytics by installing the Google Analytics opt-out browser add-on. The add-on prevents the Google Analytics JavaScript (ga.js, analytics.js, and dc.js) from sharing information with Google Analytics about visits activity.</p>                <p>For more information on the privacy practices of Google, please visit the Google Privacy & Terms web page: <a href="https://policies.google.com/privacy?hl=en">https://policies.google.com/privacy?hl=en</a></p>
 				    </li>
-				                            </ul>
+				</ul>
 
 
 				<h2>Links To Other Sites</h2>
 				<p>Our Service may contain links to other sites that are not operated by us. If you click on a third party link, you will be directed to that third party's site. We strongly advise you to review the Privacy Policy of every site you visit.</p>
 				<p>We have no control over and assume no responsibility for the content, privacy policies or practices of any third party sites or services.</p>
-
-
-				<h2>Children's Privacy</h2>
-				<p>Our Service does not address anyone under the age of 18 ("Children").</p>
-				<p>We do not knowingly collect personally identifiable information from anyone under the age of 18. If you are a parent or guardian and you are aware that your Children has provided us with Personal Data, please contact us. If we become aware that we have collected Personal Data from children without verification of parental consent, we take steps to remove that information from our servers.</p>
 
 
 				<h2>Changes To This Privacy Policy</h2>

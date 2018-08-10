@@ -3,7 +3,7 @@ import {StyleSheet, css} from 'aphrodite';
 
 import { withTracker } from 'meteor/react-meteor-data';
 
-import { faFacebook, faInstagram, faWhatsapp, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
+import { faFacebook, faInstagram, faYoutube, faWhatsapp, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -807,6 +807,7 @@ class Footer extends Component {
 	          <div className={css(footerStyle.social)}>
 	            <a href="https://www.facebook.com/HikeAcademyBrasil" target="_blank"><FontAwesomeIcon className={css(footerStyle.socialIcon)} icon={faFacebook}/></a>
 	            <a href="https://www.instagram.com/hikeacademy/" target="_blank"><FontAwesomeIcon className={css(footerStyle.socialIcon)} icon={faInstagram}/></a>
+	            <a href="https://www.youtube.com/channel/UCBctq2IkDODocLweZbpgKBQ" target="_blank"><FontAwesomeIcon className={css(footerStyle.socialIcon)} icon={faYoutube}/></a>
 	          </div>
 	          <div>
 	          	<a className={css(footerStyle.link)} href="/privacy-policy">Política de Privacidade</a>

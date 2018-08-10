@@ -15,8 +15,6 @@ class TermsOfUse extends Component {
 
 				<p>These Terms will be applied fully and affect to your use of this Website. By using this Website, you agreed to accept all terms and conditions written in here. You must not use this Website if you disagree with any of these Website Standard Terms and Conditions.</p>
 
-				<p>Minors or people below 18 years old are not allowed to use this Website.</p>
-
 				<h2>Intellectual Property Rights</h2>
 
 				<p>Other than the content you own, under these Terms, Hike Academy and/or its licensors own all the intellectual property rights and materials contained in this Website.</p>
