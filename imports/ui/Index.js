@@ -808,6 +808,12 @@ class Footer extends Component {
 	            <a href="https://www.facebook.com/HikeAcademyBrasil" target="_blank"><FontAwesomeIcon className={css(footerStyle.socialIcon)} icon={faFacebook}/></a>
 	            <a href="https://www.instagram.com/hikeacademy/" target="_blank"><FontAwesomeIcon className={css(footerStyle.socialIcon)} icon={faInstagram}/></a>
 	          </div>
+	          <div>
+	          	<a className={css(footerStyle.link)} href="/privacy-policy">Política de Privacidade</a>
+	          </div>
+	          <div>
+	          	<a className={css(footerStyle.link)} href="/terms-of-use">Termos de Uso</a>
+	          </div>
 	        </div>
 	    </div>
 	   );
@@ -833,6 +839,12 @@ const footerStyle = StyleSheet.create({
 		borderBottom: '1px solid white',
 		marginBottom: '10px',
 		borderWidth: 'thin',
+	},
+	link: {
+		color: 'white',
+		':hover': {
+			textDecoration: 'none',
+		},
 	}
 });
 
