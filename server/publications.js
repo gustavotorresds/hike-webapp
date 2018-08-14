@@ -79,5 +79,9 @@ Meteor.publish('comment', function(commentId) {
 });
 
 Meteor.publish('selfUser', function() {
-	return Meteor.users.find({_id: Meteor.userId()})
+	return Meteor.users.find({_id: Meteor.userId()});
+});
+
+Meteor.publish(null, function () {
+	return Meteor.roles.find({});
 });
