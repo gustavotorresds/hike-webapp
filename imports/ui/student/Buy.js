@@ -21,7 +21,7 @@ class Buy extends Component {
 		const script = document.createElement("script");
 		script.src="https://www.mercadopago.com.br/integrations/v1/web-tokenize-checkout.js";
 		script.dataset.publicKey=Meteor.settings.public.MPPublic;
-		script.dataset.transactionAmount="5";
+		script.dataset.transactionAmount="1";
 		script.dataset.buttonLabel="Comprar";
 		let form = document.getElementById('MPForm');
 		form.appendChild(script);
