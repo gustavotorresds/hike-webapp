@@ -1,10 +1,10 @@
-import { Courses } from './courses.js';
-import { Contents } from './contents.js';
-import { Lectures } from './lectures.js';
-import { Comments } from './comments.js';
+import { Courses } from '../imports/api/courses.js';
+import { Contents } from '../imports/api/contents.js';
+import { Lectures } from '../imports/api/lectures.js';
+import { Comments } from '../imports/api/comments.js';
 
-var MP = require ("mercadopago");
-var mp = new MP (Meteor.settings.private.MPPrivate);
+// var MP = require ("mercadopago");
+// var mp = new MP (Meteor.settings.private.MPPrivate);
 
 Meteor.methods({
 	'addContentToLecture': function(type, core, lectureId) {
@@ -218,37 +218,37 @@ Meteor.methods({
         })
         Comments.remove({_id: commentId});
     },
-    'pay': function(paymentMethodId, token) {
-        console.log('GETTING PAYMENT');
-        // console.log('PMID: ', paymentMethodId);
-        // console.log('TOKEN: ', token);
+    // 'pay': function(paymentMethodId, token) {
+    //     console.log('GETTING PAYMENT');
+    //     // console.log('PMID: ', paymentMethodId);
+    //     // console.log('TOKEN: ', token);
 
-        const user = Meteor.user();
-        if(!user) {
-            throw new Meteor.Error(403, 'Should be logged in');
-        }
+    //     const user = Meteor.user();
+    //     if(!user) {
+    //         throw new Meteor.Error(403, 'Should be logged in');
+    //     }
 
-        const email = user.emails[0].address;
-        console.log('EMAIL: ', email);
+    //     const email = user.emails[0].address;
+    //     console.log('EMAIL: ', email);
 
-        var doPayment = mp.post ("/v1/payments",
-        {
-            "transaction_amount": 1,
-            "token": token,
-            "description": "Hike Teste",
-            "installments": 1,
-            "payment_method_id": paymentMethodId,
-            "payer": {
-                "email": email
-            }
-        });
+    //     var doPayment = mp.post ("/v1/payments",
+    //     {
+    //         "transaction_amount": 1,
+    //         "token": token,
+    //         "description": "Hike Teste",
+    //         "installments": 1,
+    //         "payment_method_id": paymentMethodId,
+    //         "payer": {
+    //             "email": email
+    //         }
+    //     });
 
-        doPayment.then (
-            function (payment) {
-                console.log (payment);
-            },
-            function (error){
-                console.log (error);
-            });
-    }
+    //     doPayment.then (
+    //         function (payment) {
+    //             console.log (payment);
+    //         },
+    //         function (error){
+    //             console.log (error);
+    //         });
+    // }
 });
